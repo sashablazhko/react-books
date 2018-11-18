@@ -1,6 +1,10 @@
 .Layout{
   min-height: 100%;
   display: grid;
-  grid-template-areas: 'header' 'main' 'footer';
-  grid-template-rows: auto 1fr auto;
+  grid-template-areas: 'main' 'footer';
+  grid-template-rows: 1fr auto;
+}
+
+.Layout main{
+  padding-top: 50px;
 }
