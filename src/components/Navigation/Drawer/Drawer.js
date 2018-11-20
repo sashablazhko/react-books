@@ -5,7 +5,7 @@ import Backdrop from "../../UI/Backdrop/Backdrop";
 
 const links = [
   { to: "/", label: "На главную", exact: true },
-  { to: "/signin", label: "Вход", exact: false },
+  { to: "/auth/signin", label: "Вход", exact: false },
   { to: "/cabinet", label: "Мой Кабинет", exact: false },
 ];
 
