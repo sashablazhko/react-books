@@ -1,0 +1,44 @@
+.AuthMenu{
+  position: relative;
+}
+
+.AuthMenu i{
+  font-size: 20px;
+  cursor: pointer;
+  color: #fff;
+  transition: opacity, right .22s ease-in, color .5s ease;
+}
+
+.AuthMenu i:hover{
+  opacity: .7;
+}
+
+.AuthMenu .submenu_wrapper{
+  position: absolute;
+  left: auto;
+  right: -74px;
+  padding-top: 15px;
+  display: none;
+}
+
+.AuthMenu:hover .submenu_wrapper{
+  display: block;
+}
+
+.AuthMenu .submenu{
+  background-color: rgba(174,62,62, .8);
+  text-align: center;
+  padding: 0 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.AuthMenu .submenu p{
+  margin: 0;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(174,62,62, 1);
+}
+
+.AuthMenu .submenu p:last-child{
+  border-bottom: none;
+}

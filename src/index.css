@@ -24,6 +24,7 @@
 body {
   margin: 0;
   height: 100%;
+  font-family: 'Open Sans', sans-serif;
 }
 
 /**
@@ -356,3 +357,37 @@ template {
  #root{
    height: 100%;
  }
+
+ .container{
+  box-sizing: border-box;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px;
+}
+
+.container__small{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  padding: 15px 0;
+}
+
+.background{
+  background-color: rgba(220, 220, 220, .8);
+  border-radius: 5px;
+}
+
+.centerblock{
+  box-sizing: border-box;
+  min-width: 320px;
+  border: 2px solid rgba(174,62,62,1);
+  padding: 15px;
+}
+
+.btn__wrapper{
+  display: flex;
+  height: 64px;
+  align-items: center;
+}

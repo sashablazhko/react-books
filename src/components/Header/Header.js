@@ -1,17 +1,20 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
-import "../../index.css";
 import classes from "./Header.module.css";
+import AuthMenu from "../Navigation/AuthMenu/AuthMenu";
 
 export class Header extends Component {
   cls = [classes.Header, "grid-item"];
   render() {
     return (
       <header className={this.cls.join(" ")}>
-        <div className="logo">book4u</div>
-        <div className="options">
-          <div className="login">login</div>
-          <div className="menu">menu</div>
+        <div className={classes.logo}>
+          <Link to="/">Book4U</Link>
+        </div>
+
+        <div className={classes.options}>
+          <AuthMenu />
         </div>
       </header>
     );

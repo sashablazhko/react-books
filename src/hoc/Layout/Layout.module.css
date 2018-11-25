@@ -2,7 +2,7 @@
   min-height: 100%;
   display: grid;
   grid-template-areas: 'main' 'footer';
-  grid-template-rows: 1fr auto;
+  grid-template-rows: 1fr 30px;
 }
 
 .Layout main{
