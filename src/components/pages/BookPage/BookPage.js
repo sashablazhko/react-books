@@ -1,6 +1,8 @@
 import React from "react";
 
-const Book = () => {
+import bg from "../../../resources/images/bg.jpg";
+
+const BookPage = () => {
   return (
     <div>
       Book
@@ -10,4 +12,4 @@ const Book = () => {
   );
 };
 
-export default Book;
+export default BookPage;

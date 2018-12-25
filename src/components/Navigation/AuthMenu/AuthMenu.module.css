@@ -26,7 +26,7 @@
 }
 
 .AuthMenu .submenu{
-  background-color: rgba(174,62,62, .8);
+  background-color: rgba(140,67,67, .8);
   text-align: center;
   padding: 0 5px;
   border-bottom-left-radius: 5px;
@@ -36,7 +36,7 @@
 .AuthMenu .submenu p{
   margin: 0;
   padding: 15px 0;
-  border-bottom: 1px solid rgba(174,62,62, 1);
+  border-bottom: 1px solid rgba(140,67,67, 1);
 }
 
 .AuthMenu .submenu p:last-child{

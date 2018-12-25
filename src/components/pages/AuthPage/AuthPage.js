@@ -3,23 +3,26 @@ import classes from "./AuthPage.module.css";
 import { connect } from "react-redux";
 
 import { signUp, signIn, moduleName } from "../../../ducks/auth";
-import SignIn from "../../auth/SignIn/SignIn";
-import SignUp from "../../auth/SignUp/SignUp";
+import Sign from "../../auth/Sign/Sign";
+// import SignIn from "../../auth/SignIn/SignIn";
+// import SignUp from "../../auth/SignUp/SignUp";
+
+import bg from "../../../resources/images/bg.jpg";
 
 const AuthPage = props => {
-  const handleSignIn = ({ email, password }) => props.signIn(email, password);
+  const handleSignIn = ({ userEmail, userPass }) => props.signIn(userEmail, userPass);
   const handleSignUp = ({ email, password }) => props.signUp(email, password);
 
   const renderBody = () => {
-    if (props.singup) {
-      return <SignUp onSubmit={handleSignUp} loading={props.loading} />;
+    if (props.signup) {
+      return <Sign signup onSubmit={handleSignUp} loading={props.loading} />;
     } else {
-      return <SignIn onSubmit={handleSignIn} loading={props.loading} />;
+      return <Sign onSubmit={handleSignIn} loading={props.loading} />;
     }
   };
 
   return (
-    <div className={classes.AuthPage} style={{ background: `url(${props.bg})` }}>
+    <div className={classes.AuthPage} style={{ background: `url(${bg})` }}>
       <div className="container container__small">
         <div className="centerblock background">{renderBody()}</div>
       </div>

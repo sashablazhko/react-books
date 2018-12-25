@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import classes from "./SignIn.module.css";
+import classes from "./Sign.module.css";
 import { Form, Field } from "react-final-form";
 import { Link } from "react-router-dom";
+import emailValidator from "email-validator";
 import Loader from "../../UI/Loader/Loader";
 
-class SignIn extends Component {
+class Sign extends Component {
   constructor(props) {
     super(props);
     this.formRef = React.createRef();
@@ -16,10 +17,10 @@ class SignIn extends Component {
   }
 
   render() {
-    const { onSubmit, loading } = this.props;
+    const { signup, onSubmit, loading } = this.props;
     return (
-      <div className={classes.SignIn}>
-        <h2>Вход</h2>
+      <div className={classes.Sign}>
+        <h2>{signup ? "Регистрация" : "Вход"}</h2>
         {/* <form onSubmit={handleSubmit}>
           <div>
             <Field name="email" label="email" component={ErrorFormField} />
@@ -37,10 +38,10 @@ class SignIn extends Component {
         <Form onSubmit={onSubmit} validate={validate} ref={this.formRef}>
           {({ handleSubmit, submitting, pristine, values, invalid }) => (
             <form onSubmit={handleSubmit}>
-              <Field name="userName" placeholder="Имя">
+              <Field name="userEmail" placeholder="Email">
                 {({ input, meta, placeholder }) => (
                   <div className="row">
-                    <label>Имя</label>
+                    <label>Email</label>
                     <input {...input} placeholder={placeholder} autoComplete="username" />
                     {meta.error && meta.touched && <div className={classes.error}>{meta.error}</div>}
                   </div>
@@ -68,8 +69,8 @@ class SignIn extends Component {
           )}
         </Form>
         <hr />
-        <Link to="/auth/signup">Регистрация</Link>
-        <p>TODO: Forgot the pass</p>
+        {signup ? <Link to="/auth/signin">Вход</Link> : <Link to="/auth/signup">Регистрация</Link>}
+        {!signup && <p>TODO: Forgot the pass</p>}
       </div>
     );
   }
@@ -77,8 +78,10 @@ class SignIn extends Component {
 
 const validate = values => {
   const errors = {};
-  if (!values.userName) {
-    errors.userName = "Не может быть пустым";
+  if (!values.userEmail) {
+    errors.userEmail = "Не может быть пустым";
+  } else if (!emailValidator.validate(values.userEmail)) {
+    errors.userEmail = "Некорректный email";
   }
   if (!values.userPass) {
     errors.userPass = "Не может быть пустым";
@@ -88,4 +91,4 @@ const validate = values => {
   return errors;
 };
 
-export default SignIn;
+export default Sign;

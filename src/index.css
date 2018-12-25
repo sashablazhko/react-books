@@ -382,7 +382,7 @@ template {
 .centerblock{
   box-sizing: border-box;
   min-width: 320px;
-  border: 2px solid rgba(174,62,62,1);
+  border: 2px solid rgba(140,67,67,1);
   padding: 15px;
 }
 
@@ -390,4 +390,13 @@ template {
   display: flex;
   height: 64px;
   align-items: center;
+  justify-content: space-between;
+}
+
+.row{
+  margin-bottom: 15px;
+}
+
+button[disabled] {
+  cursor: not-allowed;
 }

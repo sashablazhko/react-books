@@ -1,13 +1,18 @@
 import Auth from "../services/AuthService";
-import { Record, Map } from "immutable";
+import { Record } from "immutable";
+
+const UserRecord = Record({
+  id: null,
+  accessToken: null,
+  email: null,
+  status: null,
+  expirationDate: null,
+});
 
 const ReducerState = Record({
-  user: new Map({
-    accessToken: null,
-    email: null,
-    expirationDate: null,
-  }),
+  user: new UserRecord(),
   loading: false,
+  redirectToReferrer: false,
   error: null,
   errorMsg: null,
 });
@@ -46,19 +51,40 @@ export default function reducer(state = new ReducerState(), action) {
       return state
         .set("loading", false)
         .set("error", null)
+        .setIn(["user", "id"], payload.id)
         .setIn(["user", "accessToken"], payload.accessToken)
         .setIn(["user", "email"], payload.email)
+        .setIn(["user", "status"], payload.status)
         .setIn(["user", "expirationDate"], payload.expirationDate);
 
     case SIGN_IN_ERROR:
       return state
         .set("loading", false)
         .set("error", true)
-        .set("errorMsg", "Проблемы с авторизацией");
+        .set("errorMsg", payload.errMsg);
 
     default:
       return state;
   }
+}
+
+export function singInSuccess(email, serverToken) {
+  return dispatch => {
+    const base64Url = serverToken.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    const serverAuthRes = JSON.parse(window.atob(base64));
+    console.log("serverAuthRes", serverAuthRes);
+    dispatch({
+      type: SIGN_IN_SUCCESS,
+      payload: {
+        id: serverAuthRes.sub,
+        accessToken: serverToken,
+        email: email,
+        status: serverAuthRes.status,
+        expirationDate: new Date(serverAuthRes.exp * 1000),
+      },
+    });
+  };
 }
 
 //TODO saga
@@ -97,26 +123,16 @@ export function signIn(email, password) {
 
     Auth.login(email, password).then(
       res => {
-        const { expires_in, access_token } = res.data;
-        const expirationDate = new Date(new Date().getTime() + expires_in * 1000);
-
-        localStorage.setItem("accessToken", access_token);
-        localStorage.setItem("email", email);
-        localStorage.setItem("expirationDate", expirationDate);
-        dispatch({
-          type: SIGN_IN_SUCCESS,
-          payload: {
-            accessToken: access_token,
-            email,
-            expirationDate,
-          },
-        });
+        console.log("res", res);
+        dispatch(singInSuccess(email, res.data.access_token));
       },
       err => {
         console.log("SIGN IN ERR", err);
         dispatch({
           type: SIGN_IN_ERROR,
-          err,
+          payload: {
+            errMsg: err.response.data.error,
+          },
         });
       }
     );

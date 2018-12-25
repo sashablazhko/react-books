@@ -3,6 +3,7 @@ import classes from "./HomePage.module.css";
 import { connect } from "react-redux";
 
 import { loadAllBooks, moduleName } from "../../../ducks/books.js";
+import bg from "../../../resources/images/bg.jpg";
 import BooksList from "../../BooksList/BooksList";
 import LastReading from "../../LastReading/LastReading";
 
@@ -13,7 +14,7 @@ class Home extends Component {
 
   render() {
     return (
-      <div className={classes.Home} style={{ background: `url(${this.props.bg})` }}>
+      <div className={classes.Home} style={{ background: `url(${bg})` }}>
         <div className="container background">
           {/* <code>
             <pre>{JSON.stringify(this.props, null, 4)}</pre>
