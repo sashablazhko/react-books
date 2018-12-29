@@ -11,7 +11,10 @@ import bg from "../../../resources/images/bg.jpg";
 
 const AuthPage = props => {
   const handleSignIn = ({ userEmail, userPass }) => props.signIn(userEmail, userPass);
-  const handleSignUp = ({ email, password }) => props.signUp(email, password);
+  // const handleSignIn = ({ userEmail, userPass }) => console.log("userEmail, userPass", userEmail, userPass);
+  // const handleSignUp = ({ userEmail, userPass }) => props.signUp(email, password);
+  const handleSignUp = ({ userEmail, userPass, reCaptcha }) =>
+    console.log("userEmail, userPass, reCaptcha", userEmail, userPass, reCaptcha);
 
   const renderBody = () => {
     if (props.signup) {
