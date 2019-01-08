@@ -1,7 +1,7 @@
 import { delay } from "redux-saga";
 import { spawn, call } from "redux-saga/effects";
 // import { saga as newsSaga } from "../ducks/news";
-// import { saga as authSaga } from "../ducks/auth";
+import { saga as authSaga } from "../ducks/auth";
 
 const makeRestartable = saga => {
   return function*() {
@@ -22,7 +22,7 @@ const makeRestartable = saga => {
   };
 };
 
-const rootSagas = [].map(makeRestartable);
+const rootSagas = [authSaga].map(makeRestartable);
 
 export default function* root() {
   yield rootSagas.map(saga => call(saga));

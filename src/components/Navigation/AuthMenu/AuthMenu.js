@@ -1,20 +1,40 @@
 import React from "react";
 import classes from "./AuthMenu.module.css";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { signOut, moduleName } from "../../../ducks/auth";
+import { isAuthorizedSelector } from "../../../selectors";
 
-const AuthMenu = () => {
+const AuthMenu = ({ isAuthorized, email, signOut }) => {
   return (
     <div className={classes.AuthMenu}>
-      <i className="fas fa-user" />
-      {/* <i className="fas fa-sign-in-alt" /> */}
-      <div className={classes.submenu_wrapper}>
-        <div className={classes.submenu}>
-          <p>sashablazhko@gmail.com</p>
-          <p>Мой кабинет</p>
-          <p>Выйти</p>
+      {!!isAuthorized && <i className="fas fa-user" />}
+      {!isAuthorized && (
+        <Link to="/auth/signin">
+          <i className="fas fa-sign-in-alt" />
+        </Link>
+      )}
+      {!!isAuthorized && (
+        <div className={classes.submenu_wrapper}>
+          <div className={classes.email}>
+            <p>{email}</p>
+          </div>
+          <ul className={classes.submenu}>
+            <li>Мой кабинет</li>
+            <li onClick={signOut}>Выйти</li>
+          </ul>
         </div>
-      </div>
+      )}
     </div>
   );
 };
 
-export default AuthMenu;
+export default connect(
+  state => {
+    return {
+      isAuthorized: isAuthorizedSelector(state),
+      email: state[moduleName].user.email,
+    };
+  },
+  { signOut }
+)(AuthMenu);

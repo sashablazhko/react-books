@@ -29,7 +29,7 @@ class App extends Component {
           <Route path="/auth/signin" component={AuthPage} />
           <Route path="/auth/signup" component={props => <AuthPage signup {...props} />} />
           <ProtectedRoute path="/cabinet" component={AsyncUserCabinetPage} />
-          <Route path="/admin" component={AsyncAdmin} />
+          <ProtectedRoute path="/admin" component={AsyncAdmin} />
           <Route exact path="/" component={HomePage} />
         </Switch>
       </Layout>

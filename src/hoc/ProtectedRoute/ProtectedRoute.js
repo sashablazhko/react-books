@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import { toast } from "react-toastify";
 import { moduleName } from "../../ducks/auth";
+import { isAuthorizedSelector } from "../../selectors";
 
 export class ProtectedRoute extends Component {
   render() {
@@ -10,18 +12,20 @@ export class ProtectedRoute extends Component {
   }
 
   renderProtected = routeProps => {
-    const { component: ProtectedComponent, authorized, location } = this.props;
-    return authorized ? (
+    const { component: ProtectedComponent, isAuthorized, location } = this.props;
+    return isAuthorized ? (
       <ProtectedComponent {...routeProps} />
     ) : (
-      <Redirect to={{ pathname: "/auth/signin", state: { from: location } }} />
+      <Redirect to={{ pathname: "/auth/signin", state: { from: location } }}>
+        {toast.error("Для доступа выполните вход")}
+      </Redirect>
     );
   };
 }
 
 export default connect(
   state => ({
-    authorized: state[moduleName].user.expirationDate && new Date() < state[moduleName].user.expirationDate,
+    isAuthorized: isAuthorizedSelector(state),
   }),
   null,
   null,

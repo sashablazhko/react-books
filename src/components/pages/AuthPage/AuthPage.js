@@ -1,6 +1,7 @@
 import React from "react";
 import classes from "./AuthPage.module.css";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 import { signUp, signIn, moduleName } from "../../../ducks/auth";
 import Sign from "../../auth/Sign/Sign";
@@ -9,18 +10,23 @@ import Sign from "../../auth/Sign/Sign";
 
 import bg from "../../../resources/images/bg.jpg";
 
-const AuthPage = props => {
-  const handleSignIn = ({ userEmail, userPass }) => props.signIn(userEmail, userPass);
+const AuthPage = ({ signup, loading, location, redirectToReferrer, signIn, signUp }) => {
+  const { from } = location.state || { from: { pathname: "/" } };
+  if (redirectToReferrer) {
+    return <Redirect to={from} />;
+  }
+
+  const handleSignIn = ({ userEmail, userPass }) => signIn(userEmail, userPass);
   // const handleSignIn = ({ userEmail, userPass }) => console.log("userEmail, userPass", userEmail, userPass);
-  // const handleSignUp = ({ userEmail, userPass }) => props.signUp(email, password);
+  // const handleSignUp = ({ userEmail, userPass }) => signUp(email, password);
   const handleSignUp = ({ userEmail, userPass, reCaptcha }) =>
     console.log("userEmail, userPass, reCaptcha", userEmail, userPass, reCaptcha);
 
   const renderBody = () => {
-    if (props.signup) {
-      return <Sign signup onSubmit={handleSignUp} loading={props.loading} />;
+    if (signup) {
+      return <Sign signup onSubmit={handleSignUp} loading={loading} />;
     } else {
-      return <Sign onSubmit={handleSignIn} loading={props.loading} />;
+      return <Sign onSubmit={handleSignIn} loading={loading} />;
     }
   };
 
@@ -34,6 +40,9 @@ const AuthPage = props => {
 };
 
 export default connect(
-  state => ({ loading: state[moduleName].loading }),
+  state => ({
+    loading: state[moduleName].loading,
+    redirectToReferrer: state[moduleName].redirectToReferrer,
+  }),
   { signUp, signIn }
 )(AuthPage);

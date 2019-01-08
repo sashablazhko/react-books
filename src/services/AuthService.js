@@ -8,7 +8,7 @@ export default {
     return Api().post("/auth/login", { email, password });
   },
   logout() {
-    return;
+    return Api().post("./auth/logout");
   },
   refres() {
     return;
