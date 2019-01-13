@@ -4,7 +4,12 @@ export default {
   getBooks() {
     return Api().get("/books");
   },
-  getChapter(bookId, chapterId) {
+
+  getBook(bookId) {
+    return Api().get(`/books/${bookId}`);
+  },
+
+  getChapterText(bookId, chapterId) {
     return Api().get(`/books/${bookId}/${chapterId}`);
   },
 };

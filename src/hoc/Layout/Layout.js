@@ -1,21 +1,39 @@
 import React, { Component } from "react";
 import classes from "./Layout.module.css";
-import { Provider } from "react-redux";
-import store from "../../redux";
-import { ConnectedRouter } from "connected-react-router";
-import history from "../../history";
 import { ToastContainer } from "react-toastify";
+import { connect } from "react-redux";
+import Cookies from "universal-cookie";
 
 import "react-toastify/dist/ReactToastify.min.css";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import MenuToggle from "../../components/Navigation/MenuToggle/MenuToggle";
 import Drawer from "../../components/Navigation/Drawer/Drawer";
+import { moduleName, me, refreshToken } from "../../ducks/auth";
+import { decodeToken, isExpired } from "../../helpers";
+import Loader from "../../components/UI/Loader/Loader";
 
 export class Layout extends Component {
-  state = {
-    menu: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      menu: false,
+    };
+    this.cookies = new Cookies();
+  }
+
+  componentDidMount() {
+    const { expirationDate, me, refreshToken } = this.props;
+    const accessToken = this.cookies.get("ACCESS_TOKEN");
+    if (accessToken) {
+      const tokenData = decodeToken(accessToken);
+      if (!isExpired(tokenData.expirationDate) && !expirationDate) {
+        me(accessToken);
+      } else if (isExpired(tokenData.expirationDate) && !expirationDate) {
+        refreshToken(accessToken);
+      }
+    }
+  }
 
   toggleMenuHandler = () => {
     this.setState({
@@ -30,21 +48,24 @@ export class Layout extends Component {
   };
 
   render() {
+    const { loading } = this.props;
     return (
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <div className={classes.Layout}>
-            <Drawer isOpen={this.state.menu} onClose={this.menuCloseHandler} />
-            <MenuToggle onToggle={this.toggleMenuHandler} isOpen={this.state.menu} />
-            <Header />
-            <main>{this.props.children}</main>
-            <Footer />
-            <ToastContainer autoClose={3000} />
-          </div>
-        </ConnectedRouter>
-      </Provider>
+      <div className={classes.Layout}>
+        <Drawer isOpen={this.state.menu} onClose={this.menuCloseHandler} />
+        <MenuToggle onToggle={this.toggleMenuHandler} isOpen={this.state.menu} />
+        <Header />
+        <main>{loading ? <Loader /> : this.props.children}</main>
+        <Footer />
+        <ToastContainer autoClose={3000} />
+      </div>
     );
   }
 }
 
-export default Layout;
+export default connect(
+  state => ({
+    expirationDate: state[moduleName].user.expirationDate,
+    loading: state[moduleName].loading,
+  }),
+  { me, refreshToken }
+)(Layout);

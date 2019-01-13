@@ -1,15 +1,22 @@
 import React from "react";
+import classes from "./BookCard.module.css";
+import { Link } from "react-router-dom";
 
-const BookCard = props => {
+const BookCard = ({ book: { id_book, book_img, book_name, content, author_name } }) => {
   return (
-    <div>
-      BookCard
-      <img src={`http://laravel-books/uploads/${props.book.book_img}`} alt={`${props.book.book_name} Book Poster`} />
-      <p>{props.book.book_name}</p>
-      <p>{props.book.author_name}</p>
-      <p>{props.book.book_discription}</p>
-      <p>category</p>
-      <p>stars</p>
+    <div className={classes.BookCard}>
+      <div className={classes.image}>
+        <img src={`http://laravel-books/uploads/${book_img}`} alt={`${book_name} Book Poster`} />
+      </div>
+      <div className={classes.content}>
+        <h2>
+          <Link to={`./book/${id_book}`}>{book_name}</Link>
+        </h2>
+        <p>{author_name}</p>
+        {/* <p>{book_discription}</p> */}
+        <p>category</p>
+        <p>stars</p>
+      </div>
     </div>
   );
 };

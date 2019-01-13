@@ -1,26 +1,37 @@
-import React from "react";
+import React, { Component } from "react";
+import classes from "./BooksList.module.css";
 import { connect } from "react-redux";
 import BookCard from "./BookCard/BookCard";
 import Loader from "../UI/Loader/Loader";
 
-import { moduleName } from "../../ducks/books.js";
+import { moduleName, loadAllBooks } from "../../ducks/books.js";
+import { mapToArr } from "../../helpers";
 
-const BooksList = props => {
-  if (props.loading) return <Loader />;
-  return (
-    <div>
-      {props.books
-        .valueSeq()
-        .toArray()
-        .map(book => {
+class BooksList extends Component {
+  componentDidMount() {
+    const { loadAllBooks, books } = this.props;
+    if (books.size < 3) {
+      loadAllBooks();
+    }
+  }
+
+  render() {
+    const { loading, books } = this.props;
+    if (loading) return <Loader />;
+    return (
+      <div className={classes.BooksList}>
+        {mapToArr(books).map(book => {
           return <BookCard key={book.id_book} book={book} />;
         })}
-    </div>
-  );
-};
+      </div>
+    );
+  }
+}
 
-export default connect(state => ({
-  books: state[moduleName].entities,
-  loading: state[moduleName].loading,
-  loaded: state[moduleName].loaded,
-}))(BooksList);
+export default connect(
+  state => ({
+    books: state[moduleName].entities,
+    loading: state[moduleName].loading,
+  }),
+  { loadAllBooks }
+)(BooksList);
