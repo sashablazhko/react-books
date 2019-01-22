@@ -11,7 +11,7 @@ import AuthPage from "../pages/AuthPage/AuthPage";
 import Loader from "../UI/Loader/Loader";
 
 const AsyncAdmin = Loadable({
-  loader: () => import("../../hoc/Admin/Admin"),
+  loader: () => import("../../components/pages/AdminPage/AdminPage"),
   loading: Loader,
 });
 const AsyncUserCabinetPage = Loadable({

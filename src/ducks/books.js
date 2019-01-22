@@ -1,4 +1,4 @@
-import { OrderedMap, Record, List } from "immutable";
+import { OrderedMap, Record } from "immutable";
 import Books from "../services/BooksService";
 import { arrToMap } from "../helpers";
 import { toast } from "react-toastify";

@@ -7,6 +7,16 @@
   color: #fff;
   transition: opacity, right .22s ease-in, color .5s ease;
   z-index: 100;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+.MenuToggle:focus, 
+.MenuToggle:active,
+.MenuToggle:hover,
+.MenuToggle:visited{
+  outline: none;
 }
 
 .MenuToggle:hover{

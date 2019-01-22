@@ -75,7 +75,7 @@ export default function reducer(state = new ReducerState(), action) {
 
 export function singInSuccess(email, serverToken) {
   return dispatch => {
-    cookies.set("ACCESS_TOKEN", serverToken);
+    cookies.set("ACCESS_TOKEN", serverToken, { path: "/" });
     const tokenData = decodeToken(serverToken);
     dispatch({
       type: SIGN_IN_SUCCESS,
@@ -171,7 +171,7 @@ export function me(accessToken) {
 
     Api().defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     try {
-      const res = await Api().post("./auth/me");
+      const res = await Api().post("/auth/me");
       dispatch(singInSuccess(res.data.email, accessToken));
     } catch (err) {
       console.log("ME ERR", err);
@@ -194,7 +194,7 @@ export function refreshToken(accessToken) {
 
     Api().defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     try {
-      const res = await Api().post("./auth/refresh");
+      const res = await Api().post("/auth/refresh");
       dispatch(me(res.data.access_token));
     } catch (err) {
       console.log("REFRESH ERR", err);
@@ -220,7 +220,7 @@ export function signOut() {
     try {
       const {
         data: { message },
-      } = await Api().post("./auth/logout");
+      } = await Api().post("/auth/logout");
       if (message === "Successfully logged out") {
         cookies.remove("ACCESS_TOKEN");
         dispatch({

@@ -1,0 +1,40 @@
+.Sidebar{
+  margin: 0;
+  padding: 15px 0 0 0;
+  border-right: 1px solid rgba(140,67,67,1);
+  height: 100%;
+  list-style-type: none;
+}
+
+.Sidebar li{
+  border-bottom: 1px solid rgba(140,67,67,1);
+  background-color: #f1f1f1;
+  position: relative;
+}
+
+.Sidebar li:first-child{
+  border-top: 1px solid rgba(140,67,67,1);
+}
+
+.Sidebar li a{
+  padding: 5px 15px;
+  display: block;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: rgba(140,67,67,1);
+}
+
+.Sidebar .active{
+  background-color: #fff;
+}
+
+.Sidebar .active:after{
+  content: '';
+  display: block;
+  background-color: #fff;
+  width: 2px;
+  height: 100%;
+  position: absolute;
+  right: -1px;
+  top: 0;
+}

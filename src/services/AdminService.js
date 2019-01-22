@@ -1,9 +1,6 @@
 import Api from "./Api";
 
 export default {
-  getAuthors() {
-    return Api().get("/admin/getauthors");
-  },
   updateAuthor(idAuthor, authorName) {
     return Api().put(`/admin/updateauthor/${idAuthor}`, {
       author_name: authorName,

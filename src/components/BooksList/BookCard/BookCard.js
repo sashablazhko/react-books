@@ -10,7 +10,7 @@ const BookCard = ({ book: { id_book, book_img, book_name, content, author_name }
       </div>
       <div className={classes.content}>
         <h2>
-          <Link to={`./book/${id_book}`}>{book_name}</Link>
+          <Link to={`/book/${id_book}`}>{book_name}</Link>
         </h2>
         <p>{author_name}</p>
         {/* <p>{book_discription}</p> */}
