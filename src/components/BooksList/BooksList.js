@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import BookCard from "./BookCard/BookCard";
 import Loader from "../UI/Loader/Loader";
 
-import { moduleName, loadAllBooks } from "../../ducks/books.js";
+import { loadAllBooks } from "../../actions";
 import { mapToArr } from "../../helpers";
 
 class BooksList extends Component {
@@ -29,9 +29,12 @@ class BooksList extends Component {
 }
 
 export default connect(
-  state => ({
-    books: state[moduleName].entities,
-    loading: state[moduleName].loading,
-  }),
+  state => {
+    const { books } = state;
+    return {
+      books: books.entities,
+      loading: books.loading,
+    };
+  },
   { loadAllBooks }
 )(BooksList);
