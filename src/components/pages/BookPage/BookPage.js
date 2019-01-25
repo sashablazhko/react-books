@@ -40,11 +40,11 @@ class BookPage extends Component {
 export default connect(
   (state, ownProps) => ({
     book:
-      state[moduleName].entities.get(+ownProps.match.params.idBook) &&
-      state[moduleName].entities.get(+ownProps.match.params.idBook).toJS(),
+      state[moduleName].entities.get(ownProps.match.params.idBook) &&
+      state[moduleName].entities.get(ownProps.match.params.idBook).toJS(),
     chapters:
-      state[moduleName].entities.get(+ownProps.match.params.idBook) &&
-      state[moduleName].entities.get(+ownProps.match.params.idBook).chapters,
+      state[moduleName].entities.get(ownProps.match.params.idBook) &&
+      state[moduleName].entities.get(ownProps.match.params.idBook).chapters,
     loading: state[moduleName].loading,
   }),
   { loadBook }

@@ -41,7 +41,7 @@ class AdminAuthorPage extends Component {
 export default connect(
   (state, ownProps) => ({
     loading: state[moduleName].loading,
-    author: state[moduleName].entities.get(+ownProps.match.params.idAuthor),
+    author: state[moduleName].entities.get(ownProps.match.params.idAuthor),
   }),
   { loadAuthor, updateAuthor }
 )(AdminAuthorPage);

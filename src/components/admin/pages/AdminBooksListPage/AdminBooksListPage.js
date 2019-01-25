@@ -14,7 +14,7 @@ class AdminBooksListPage extends Component {
 
   componentDidMount() {
     const { loadAllBooks, books } = this.props;
-    if (books.size < 3) {
+    if (books.size <= 1) {
       loadAllBooks();
     }
   }

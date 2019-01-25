@@ -3,6 +3,8 @@ import Books from "../services/BooksService";
 import { arrToMap } from "../helpers";
 import { toast } from "react-toastify";
 
+import { loadAllAuthors } from "./authors";
+
 const BookRecord = Record({
   id_book: null,
   book_name: null,
@@ -53,16 +55,13 @@ export default function reducer(state = new ReducerState(), action) {
       return state
         .set("loading", false)
         .set("error", null)
-        .update("entities", entities => entities.merge(arrToMap([payload.book], "id_book", BookRecord)));
+        .update("entities", entities => arrToMap([payload.book], "id_book", BookRecord).merge(entities));
 
     case LOAD_CHAPTER_TEXT_SUCCESS:
       return state
         .set("loading", false)
         .set("error", null)
-        .setIn(
-          ["entities", +payload.idBook, "chapters", +payload.idChapter, "chapter_content"],
-          payload.chapter_content
-        );
+        .setIn(["entities", payload.idBook, "chapters", payload.idChapter, "chapter_content"], payload.chapter_content);
 
     case API_BOOKS_ERROR:
       return state
@@ -109,8 +108,11 @@ export function loadAllBooks() {
   };
 }
 
-export function loadBook(id) {
-  return async dispatch => {
+export function loadBook(id, withAurhorsList = false) {
+  return async (dispatch, getState) => {
+    if (withAurhorsList) {
+      dispatch(loadAllAuthors());
+    }
     dispatch({
       type: API_BOOKS_REQUEST,
     });

@@ -37,12 +37,12 @@ export default connect(
     chapter:
       state[moduleName].getIn([
         "entities",
-        +ownProps.match.params.idBook,
+        ownProps.match.params.idBook,
         "chapters",
-        +ownProps.match.params.idChapter,
+        ownProps.match.params.idChapter,
       ]) &&
       state[moduleName]
-        .getIn(["entities", +ownProps.match.params.idBook, "chapters", +ownProps.match.params.idChapter])
+        .getIn(["entities", ownProps.match.params.idBook, "chapters", ownProps.match.params.idChapter])
         .toJS(),
     loading: state[moduleName].loading,
   }),

@@ -1,22 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./components/App/App";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux";
 import { ConnectedRouter } from "connected-react-router";
 import history from "./history";
+import App from "./components/App/App";
+import ErrorBoundry from "./components/ErrorBoundry/ErrorBoundry";
 
 const renderApp = () => {
   ReactDOM.render(
-    <BrowserRouter>
-      <Provider store={store}>
+    <Provider store={store}>
+      <ErrorBoundry>
         <ConnectedRouter history={history}>
           <App />
         </ConnectedRouter>
-      </Provider>
-    </BrowserRouter>,
+      </ErrorBoundry>
+    </Provider>,
     document.getElementById("root")
   );
 };

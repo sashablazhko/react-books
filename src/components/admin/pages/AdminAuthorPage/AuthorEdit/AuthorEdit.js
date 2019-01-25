@@ -21,7 +21,7 @@ class AuthorEdit extends Component {
     const { author, onSubmit, loading } = this.props;
     return (
       <div className={classes.AuthorEdit}>
-        <h2>{!author ? "Создать автора" : "Редактировать автора"}</h2>
+        <h2>{!author ? "Новый автор" : "Редактировать автора"}</h2>
         <Form initialValues={this.state} onSubmit={onSubmit} ref={this.formRef}>
           {({ handleSubmit, values, submitting, pristine }) => (
             <form onSubmit={handleSubmit}>
