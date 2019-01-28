@@ -24,3 +24,19 @@ export function isExpired(tokenExp) {
   const dateNow = parseInt(Date.now() / 1000, 10);
   return tokenExp > dateNow ? false : true;
 }
+
+export function handleResponse(res) {
+  console.log("res", res);
+  const { data } = res;
+  if (res.statusText !== "OK") {
+    if (res.status === 401) {
+      // auto logout if 401 response returned from api
+      console.log("TODO LOGOUT");
+    }
+
+    const err = (data && data.message) || res.statusText;
+    return Promise.reject(err);
+  }
+
+  return data;
+}

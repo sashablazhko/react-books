@@ -30,7 +30,7 @@ const ReducerState = Record({
 });
 
 export function books(state = new ReducerState(), action) {
-  const { type, payload } = action;
+  const { type } = action;
 
   switch (type) {
     case booksConstants.API_BOOKS_REQUEST:
@@ -46,19 +46,19 @@ export function books(state = new ReducerState(), action) {
       return state
         .set("loading", false)
         .set("error", null)
-        .update("entities", entities => arrToMap([payload.book], "id_book", BookRecord).merge(entities));
+        .update("entities", entities => arrToMap([action.book], "id_book", BookRecord).merge(entities));
 
     case booksConstants.LOAD_CHAPTER_TEXT_SUCCESS:
       return state
         .set("loading", false)
         .set("error", null)
-        .setIn(["entities", payload.idBook, "chapters", payload.idChapter, "chapter_content"], payload.chapter_content);
+        .setIn(["entities", action.idBook, "chapters", action.idChapter, "chapter_content"], action.chapter_content);
 
-    case booksConstants.API_BOOKS_ERROR:
+    case booksConstants.API_BOOKS_FAILURE:
       return state
         .set("loading", false)
         .set("error", true)
-        .set("errorMsg", payload.errMsg);
+        .set("errorMsg", action.errMsg);
 
     default:
       return state;

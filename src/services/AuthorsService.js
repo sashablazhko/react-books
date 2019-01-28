@@ -1,10 +1,20 @@
 import Api from "./Api";
 
-export default {
-  getAuthors() {
-    return Api().get("/authors");
-  },
-  getAuthor(authorId) {
-    return Api().get(`/authors/${authorId}`);
-  },
+import { handleResponse } from "../helpers";
+
+export const authorsService = {
+  getAuthors,
+  getAuthor,
 };
+
+function getAuthors() {
+  return Api()
+    .get("/authors")
+    .then(handleResponse);
+}
+
+function getAuthor(authorId) {
+  return Api()
+    .get(`/authors/${authorId}`)
+    .then(handleResponse);
+}

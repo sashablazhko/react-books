@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classes from "./AdminAuthorPage.module.css";
 import { connect } from "react-redux";
 
-import { moduleName, loadAuthor, updateAuthor } from "../../../../ducks/authors";
+import { loadAuthor, updateAuthor } from "../../../../actions";
 import AuthorEdit from "./AuthorEdit/AuthorEdit";
 import Loader from "../../../UI/Loader/Loader";
 
@@ -40,8 +40,8 @@ class AdminAuthorPage extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    loading: state[moduleName].loading,
-    author: state[moduleName].entities.get(ownProps.match.params.idAuthor),
+    loading: state.authors.loading,
+    author: state.authors.entities.get(ownProps.match.params.idAuthor),
   }),
   { loadAuthor, updateAuthor }
 )(AdminAuthorPage);

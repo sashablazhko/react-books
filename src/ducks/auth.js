@@ -1,4 +1,4 @@
-import Auth from "../services/AuthService";
+import { authService as Auth } from "../services/AuthService";
 import Api from "../services/Api";
 import { Record } from "immutable";
 import { toast } from "react-toastify";

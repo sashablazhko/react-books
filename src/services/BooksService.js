@@ -1,5 +1,5 @@
 import Api from "./Api";
-import { arrToMap } from "../helpers";
+import { arrToMap, handleResponse } from "../helpers";
 import { ChapterRecord } from "../redux/reducers/books.reducer";
 
 export const booksService = {
@@ -10,7 +10,7 @@ export const booksService = {
 
 function getBooks() {
   return Api()
-    .get("/books1")
+    .get("/books")
     .then(handleResponse)
     .then(books => {
       const booksToMap = books.map(item => {
@@ -21,26 +21,21 @@ function getBooks() {
     });
 }
 
-function getBook(bookId) {
-  return Api().get(`/books/${bookId}`);
+function getBook(idBook) {
+  return Api()
+    .get(`/books/${idBook}`)
+    .then(handleResponse)
+    .then(book => {
+      const chapters = arrToMap(book.chapters, "id_chapter", ChapterRecord);
+      const chaptersToMap = { ...book, chapters };
+
+      return chaptersToMap;
+    });
 }
 
-function getChapterText(bookId, chapterId) {
-  return Api().get(`/books/${bookId}/${chapterId}`);
-}
-
-function handleResponse(res) {
-  // console.log("res", res);
-  const { data } = res;
-  if (res.statusText !== "OK") {
-    if (res.status === 401) {
-      // auto logout if 401 response returned from api
-      console.log("TODO LOGOUT");
-    }
-
-    const err = (data && data.message) || res.statusText;
-    return Promise.reject(err);
-  }
-
-  return data;
+function getChapterText(idBook, idChapter) {
+  return Api()
+    .get(`/books/${idBook}/${idChapter}`)
+    .then(handleResponse)
+    .then(data => data.chapter_content);
 }

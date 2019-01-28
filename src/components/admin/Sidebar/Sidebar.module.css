@@ -1,9 +1,11 @@
 .Sidebar{
   margin: 0;
-  padding: 15px 0 0 0;
+  padding: 0;
   border-right: 1px solid rgba(140,67,67,1);
   height: 100%;
   list-style-type: none;
+  position: sticky;
+  top: 50px;
 }
 
 .Sidebar li{
@@ -14,6 +16,7 @@
 
 .Sidebar li:first-child{
   border-top: 1px solid rgba(140,67,67,1);
+  margin-top: 15px;
 }
 
 .Sidebar li a{

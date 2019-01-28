@@ -30,10 +30,9 @@ class BooksList extends Component {
 
 export default connect(
   state => {
-    const { books } = state;
     return {
-      books: books.entities,
-      loading: books.loading,
+      books: state.books.entities,
+      loading: state.books.loading,
     };
   },
   { loadAllBooks }

@@ -1,5 +1,5 @@
 import { OrderedMap, Record } from "immutable";
-import Authors from "../services/AuthorsService";
+import { authorsService as Authors } from "../services/AuthorsService";
 import { arrToMap } from "../helpers";
 import { toast } from "react-toastify";
 import Api from "../services/Api";

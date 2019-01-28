@@ -5,7 +5,13 @@ class ErrorBoundry extends Component {
     hasError: false,
   };
 
-  componentDidCatch() {
+  static getDerivedStateFromError(err) {
+    console.log("catch Error in getDerivedStateFromError", err);
+    return { hasError: true };
+  }
+
+  componentDidCatch(err, info) {
+    console.log("catch Error in componentDidCatch", err, info);
     this.setState({ hasError: true });
   }
 

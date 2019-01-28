@@ -9,7 +9,7 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import MenuToggle from "../../components/Navigation/MenuToggle/MenuToggle";
 import Drawer from "../../components/Navigation/Drawer/Drawer";
-import { moduleName, me, refreshToken } from "../../ducks/auth";
+import { me, refreshToken } from "../../actions";
 import { decodeToken, isExpired } from "../../helpers";
 import Loader from "../../components/UI/Loader/Loader";
 
@@ -64,8 +64,8 @@ export class Layout extends Component {
 
 export default connect(
   state => ({
-    expirationDate: state[moduleName].user.expirationDate,
-    loading: state[moduleName].loading,
+    expirationDate: state.auth.user.expirationDate,
+    loading: state.auth.loading,
   }),
   { me, refreshToken }
 )(Layout);

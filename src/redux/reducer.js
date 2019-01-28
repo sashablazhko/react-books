@@ -1,15 +1,15 @@
 import { combineReducers } from "redux";
 import { connectRouter } from "connected-react-router";
-import authReducer, { moduleName as authModule } from "../ducks/auth";
+import { auth } from "./reducers/auth.reducer";
 import { books } from "./reducers/books.reducer";
-import authorsReducer, { moduleName as authorsModule } from "../ducks/authors";
+import { authors } from "./reducers/authors.reducer";
 
 export default history =>
   combineReducers({
     router: connectRouter(history),
-    [authModule]: authReducer,
+    auth,
     books,
-    [authorsModule]: authorsReducer,
+    authors,
   });
 // export default (history) => combineReducers({
 //   router: connectRouter(history),

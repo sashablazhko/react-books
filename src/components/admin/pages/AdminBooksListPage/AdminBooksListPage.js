@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Loader from "../../../UI/Loader/Loader";
 
-import { moduleName, loadAllBooks } from "../../../../ducks/books.js";
+import { loadAllBooks } from "../../../../actions";
 import { mapToArr } from "../../../../helpers";
 
 class AdminBooksListPage extends Component {
@@ -50,8 +50,8 @@ class AdminBooksListPage extends Component {
 
 export default connect(
   state => ({
-    books: state[moduleName].entities,
-    loading: state[moduleName].loading,
+    books: state.books.entities,
+    loading: state.books.loading,
   }),
   { loadAllBooks }
 )(AdminBooksListPage);

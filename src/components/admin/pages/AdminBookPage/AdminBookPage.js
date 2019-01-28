@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import classes from "./AdminBookPage.module.css";
 import { connect } from "react-redux";
 
-import { moduleName as moduleBooks, loadBook } from "../../../../ducks/books";
-import { moduleName as moduleAuthors, loadAllAuthors } from "../../../../ducks/authors";
+import { loadBook, loadAllAuthors } from "../../../../actions";
 import BookEdit from "./BookEdit/BookEdit";
 import Loader from "../../../UI/Loader/Loader";
 
@@ -51,10 +50,10 @@ class AdminBookPage extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    loadingBook: state[moduleBooks].loading,
-    loadingAuthors: state[moduleAuthors].loading,
-    book: state[moduleBooks].entities.get(ownProps.match.params.idBook),
-    authors: state[moduleAuthors].entities,
+    loadingBook: state.books.loading,
+    loadingAuthors: state.authors.loading,
+    book: state.books.entities.get(ownProps.match.params.idBook),
+    authors: state.authors.entities,
   }),
   { loadBook, loadAllAuthors }
 )(AdminBookPage);

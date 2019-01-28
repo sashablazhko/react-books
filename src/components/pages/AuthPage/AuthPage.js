@@ -3,7 +3,7 @@ import classes from "./AuthPage.module.css";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-import { signUp, signIn, moduleName } from "../../../ducks/auth";
+import { signUp, signIn } from "../../../actions";
 import Sign from "../../auth/Sign/Sign";
 // import SignIn from "../../auth/SignIn/SignIn";
 // import SignUp from "../../auth/SignUp/SignUp";
@@ -41,8 +41,8 @@ const AuthPage = ({ signup, loading, location, redirectToReferrer, signIn, signU
 
 export default connect(
   state => ({
-    loading: state[moduleName].loading,
-    redirectToReferrer: state[moduleName].redirectToReferrer,
+    loading: state.auth.loading,
+    redirectToReferrer: state.auth.redirectToReferrer,
   }),
   { signUp, signIn }
 )(AuthPage);

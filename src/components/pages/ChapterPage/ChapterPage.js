@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classes from "./ChapterPage.module.css";
 import { connect } from "react-redux";
 
-import { moduleName, loadChapterText } from "../../../ducks/books";
+import { loadChapterText } from "../../../actions";
 import Loader from "../../UI/Loader/Loader";
 
 class Chapter extends Component {
@@ -35,16 +35,9 @@ class Chapter extends Component {
 export default connect(
   (state, ownProps) => ({
     chapter:
-      state[moduleName].getIn([
-        "entities",
-        ownProps.match.params.idBook,
-        "chapters",
-        ownProps.match.params.idChapter,
-      ]) &&
-      state[moduleName]
-        .getIn(["entities", ownProps.match.params.idBook, "chapters", ownProps.match.params.idChapter])
-        .toJS(),
-    loading: state[moduleName].loading,
+      state.books.getIn(["entities", ownProps.match.params.idBook, "chapters", ownProps.match.params.idChapter]) &&
+      state.books.getIn(["entities", ownProps.match.params.idBook, "chapters", ownProps.match.params.idChapter]).toJS(),
+    loading: state.books.loading,
   }),
   { loadChapterText }
 )(Chapter);

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Loader from "../../../UI/Loader/Loader";
 
-import { moduleName, loadAllAuthors } from "../../../../ducks/authors.js";
+import { loadAllAuthors } from "../../../../actions";
 import { mapToArr } from "../../../../helpers";
 
 class AdminAuthorsListPage extends Component {
@@ -50,9 +50,9 @@ class AdminAuthorsListPage extends Component {
 
 export default connect(
   state => ({
-    authors: state[moduleName].entities,
-    loading: state[moduleName].loading,
-    listLoaded: state[moduleName].listLoaded,
+    authors: state.authors.entities,
+    loading: state.authors.loading,
+    listLoaded: state.authors.listLoaded,
   }),
   { loadAllAuthors }
 )(AdminAuthorsListPage);

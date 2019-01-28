@@ -2,7 +2,7 @@ import React from "react";
 import classes from "./AuthMenu.module.css";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { signOut, moduleName } from "../../../ducks/auth";
+import { signOut } from "../../../actions";
 import { isAuthorizedSelector } from "../../../selectors";
 
 const AuthMenu = ({ isAuthorized, email, signOut }) => {
@@ -33,7 +33,7 @@ export default connect(
   state => {
     return {
       isAuthorized: isAuthorizedSelector(state),
-      email: state[moduleName].user.email,
+      email: state.auth.user.email,
     };
   },
   { signOut }

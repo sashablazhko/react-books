@@ -3,7 +3,7 @@ import classes from "./BookPage.module.css";
 import { connect } from "react-redux";
 
 import bg from "../../../resources/images/bg.jpg";
-import { moduleName, loadBook } from "../../../ducks/books";
+import { loadBook } from "../../../actions";
 import Loader from "../../UI/Loader/Loader";
 import ChaptersList from "./ChaptersList/ChaptersList";
 
@@ -40,12 +40,12 @@ class BookPage extends Component {
 export default connect(
   (state, ownProps) => ({
     book:
-      state[moduleName].entities.get(ownProps.match.params.idBook) &&
-      state[moduleName].entities.get(ownProps.match.params.idBook).toJS(),
+      state.books.entities.get(ownProps.match.params.idBook) &&
+      state.books.entities.get(ownProps.match.params.idBook).toJS(),
     chapters:
-      state[moduleName].entities.get(ownProps.match.params.idBook) &&
-      state[moduleName].entities.get(ownProps.match.params.idBook).chapters,
-    loading: state[moduleName].loading,
+      state.books.entities.get(ownProps.match.params.idBook) &&
+      state.books.entities.get(ownProps.match.params.idBook).chapters,
+    loading: state.books.loading,
   }),
   { loadBook }
 )(BookPage);

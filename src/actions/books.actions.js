@@ -1,99 +1,77 @@
+import { toast } from "react-toastify";
 import { booksConstants } from "../constants/books.constants";
-
 import { booksService } from "../services/BooksService";
-
-export const booksActions = {
-  loadAllBooks,
-  // loadBook,
-  // loadChapterText
-};
+import { loadAllAuthors } from "./authors.actions";
 
 export function loadAllBooks() {
   return dispatch => {
-    dispatch(request());
+    dispatch(_request());
 
     booksService.getBooks().then(
       books => {
-        dispatch(success(books));
+        dispatch(_success(books));
       },
       err => {
-        console.log("LOAD ALL BOOKS ERR", err);
-        dispatch(failure(err));
+        dispatch(_failure(err.toString()));
+        toast.error(err.toString());
       }
     );
   };
 
-  function request() {
-    return { type: booksConstants.API_BOOKS_REQUEST };
-  }
-  function success(books) {
+  function _success(books) {
     return { type: booksConstants.LOAD_ALL_BOOKS_SUCCESS, books };
-  }
-  function failure(err) {
-    return { type: booksConstants.API_BOOKS_FAILURE, err };
   }
 }
 
-// export function loadBook(id, withAurhorsList = false) {
-//   return async (dispatch, getState) => {
-//     if (withAurhorsList) {
-//       dispatch(loadAllAuthors());
-//     }
-//     dispatch({
-//       type: booksConstants.API_BOOKS_REQUEST,
-//     });
+export function loadBook(id, withAurhorsList = false) {
+  return (dispatch, getState) => {
+    if (withAurhorsList) {
+      dispatch(loadAllAuthors());
+    }
+    dispatch(_request());
 
-//     try {
-//       const res = await booksService.getBook(id);
-//       const chapters = arrToMap(res.data.chapters, "id_chapter", ChapterRecord);
-//       const book = { ...res.data, chapters };
-//       dispatch({
-//         type: booksConstants.LOAD_BOOK_SUCCESS,
-//         payload: {
-//           book,
-//         },
-//       });
-//     } catch (err) {
-//       console.log("LOAD BOOK ERR", err);
-//       dispatch({
-//         type: booksConstants.API_BOOKS_ERROR,
-//         payload: {
-//           errMsg: err,
-//         },
-//       });
-//       // toast.error(err.response.data.error);
-//     }
-//   };
-// }
+    booksService.getBook(id).then(
+      book => {
+        dispatch(_success(book));
+      },
+      err => {
+        dispatch(_failure(err.toString()));
+        toast.error(err.toString());
+      }
+    );
+  };
 
-// export function loadChapterText(idBook, idChapter, loadBookInfo) {
-//   return async dispatch => {
-//     dispatch({
-//       type: booksConstants.API_BOOKS_REQUEST,
-//     });
+  function _success(book) {
+    return { type: booksConstants.LOAD_BOOK_SUCCESS, book };
+  }
+}
 
-//     try {
-//       if (loadBookInfo) {
-//         dispatch(loadBook(idBook));
-//       }
-//       const res = await booksService.getChapterText(idBook, idChapter);
-//       const { chapter_content } = res.data;
-//       dispatch({
-//         type: booksConstants.LOAD_CHAPTER_TEXT_SUCCESS,
-//         payload: {
-//           idBook,
-//           idChapter,
-//           chapter_content,
-//         },
-//       });
-//     } catch (err) {
-//       console.log("LOAD CHAPTER TEXT ERR", err);
-//       dispatch({
-//         type: booksConstants.API_BOOKS_ERROR,
-//         payload: {
-//           errMsg: err,
-//         },
-//       });
-//     }
-//   };
-// }
+export function loadChapterText(idBook, idChapter, loadBookInfo) {
+  return dispatch => {
+    dispatch(_request());
+
+    if (loadBookInfo) {
+      dispatch(loadBook(idBook));
+    }
+    booksService.getChapterText(idBook, idChapter).then(
+      chapter_content => {
+        dispatch(_success(idBook, idChapter, chapter_content));
+      },
+      err => {
+        dispatch(_failure(err.toString()));
+        toast.error(err.toString());
+      }
+    );
+  };
+
+  function _success(idBook, idChapter, chapter_content) {
+    return { type: booksConstants.LOAD_CHAPTER_TEXT_SUCCESS, idBook, idChapter, chapter_content };
+  }
+}
+
+function _request() {
+  return { type: booksConstants.API_BOOKS_REQUEST };
+}
+function _failure(errMsg) {
+  return { type: booksConstants.API_BOOKS_FAILURE, errMsg };
+}
