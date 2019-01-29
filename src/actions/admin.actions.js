@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-import Cookies from "universal-cookie";
 import { push } from "connected-react-router";
 import { adminConstants } from "../constants/admin.constants";
 import { adminService } from "../services/AdminService";
@@ -24,11 +23,12 @@ export function updateAuthor(id, author_name) {
   function _success(author) {
     return { type: adminConstants.UPDATE_AUTHOR_SUCCESS, author };
   }
-}
-
-function _request() {
-  return { type: adminConstants.API_ADMIN_REQUEST };
-}
-function _failure(errMsg) {
-  return { type: adminConstants.API_ADMIN_FAILURE, errMsg };
+  function _request() {
+    return { type: adminConstants.UPDATE_AUTHOR_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: adminConstants.UPDATE_AUTHOR_FAILURE, errMsg };
+  }
 }

@@ -11,14 +11,21 @@ export function loadAllAuthors() {
         dispatch(_success(authors));
       },
       err => {
-        dispatch(_failure(err.toString()));
-        toast.error(err.toString());
+        dispatch(_failure(err));
       }
     );
   };
 
   function _success(authors) {
     return { type: authorsConstants.LOAD_ALL_AUTHORS_SUCCESS, authors };
+  }
+  function _request() {
+    return { type: authorsConstants.LOAD_ALL_AUTHORS_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: authorsConstants.LOAD_ALL_AUTHORS_FAILURE, errMsg };
   }
 }
 
@@ -32,8 +39,7 @@ export function loadAuthor(id) {
         dispatch(_success(author));
       },
       err => {
-        dispatch(_failure(err.toString()));
-        toast.error(err.toString());
+        dispatch(_failure(err));
       }
     );
   };
@@ -41,11 +47,12 @@ export function loadAuthor(id) {
   function _success(author) {
     return { type: authorsConstants.LOAD_AUTHOR_SUCCESS, author };
   }
-}
-
-function _request() {
-  return { type: authorsConstants.API_AUTHORS_REQUEST };
-}
-function _failure(errMsg) {
-  return { type: authorsConstants.API_AUTHORS_FAILURE, errMsg };
+  function _request() {
+    return { type: authorsConstants.LOAD_AUTHOR_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: authorsConstants.LOAD_AUTHOR_FAILURE, errMsg };
+  }
 }

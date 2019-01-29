@@ -28,13 +28,13 @@ export function isExpired(tokenExp) {
 export function handleResponse(res) {
   console.log("res", res);
   const { data } = res;
-  if (res.statusText !== "OK") {
+  if (res.status >= 400) {
     if (res.status === 401) {
       // auto logout if 401 response returned from api
       console.log("TODO LOGOUT");
     }
 
-    const err = (data && data.message) || res.statusText;
+    const err = (data && data.error) || (data && data.message) || res.statusText;
     return Promise.reject(err);
   }
 

@@ -12,14 +12,21 @@ export function loadAllBooks() {
         dispatch(_success(books));
       },
       err => {
-        dispatch(_failure(err.toString()));
-        toast.error(err.toString());
+        dispatch(_failure(err));
       }
     );
   };
 
   function _success(books) {
     return { type: booksConstants.LOAD_ALL_BOOKS_SUCCESS, books };
+  }
+  function _request() {
+    return { type: booksConstants.LOAD_ALL_BOOKS_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: booksConstants.LOAD_ALL_BOOKS_FAILURE, errMsg };
   }
 }
 
@@ -35,14 +42,20 @@ export function loadBook(id, withAurhorsList = false) {
         dispatch(_success(book));
       },
       err => {
-        dispatch(_failure(err.toString()));
-        toast.error(err.toString());
+        dispatch(_failure(err));
       }
     );
   };
 
   function _success(book) {
     return { type: booksConstants.LOAD_BOOK_SUCCESS, book };
+  }
+  function _request() {
+    return { type: booksConstants.LOAD_BOOK_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    return { type: booksConstants.LOAD_BOOK_FAILURE, errMsg };
   }
 }
 
@@ -58,8 +71,7 @@ export function loadChapterText(idBook, idChapter, loadBookInfo) {
         dispatch(_success(idBook, idChapter, chapter_content));
       },
       err => {
-        dispatch(_failure(err.toString()));
-        toast.error(err.toString());
+        dispatch(_failure(err));
       }
     );
   };
@@ -67,11 +79,12 @@ export function loadChapterText(idBook, idChapter, loadBookInfo) {
   function _success(idBook, idChapter, chapter_content) {
     return { type: booksConstants.LOAD_CHAPTER_TEXT_SUCCESS, idBook, idChapter, chapter_content };
   }
-}
-
-function _request() {
-  return { type: booksConstants.API_BOOKS_REQUEST };
-}
-function _failure(errMsg) {
-  return { type: booksConstants.API_BOOKS_FAILURE, errMsg };
+  function _request() {
+    return { type: booksConstants.LOAD_CHAPTER_TEXT_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: booksConstants.LOAD_CHAPTER_TEXT_FAILURE, errMsg };
+  }
 }

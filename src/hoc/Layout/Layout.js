@@ -67,5 +67,7 @@ export default connect(
     expirationDate: state.auth.user.expirationDate,
     loading: state.auth.loading,
   }),
-  { me, refreshToken }
+  { me, refreshToken },
+  null,
+  { pure: false }
 )(Layout);

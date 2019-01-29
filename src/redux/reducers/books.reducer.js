@@ -33,7 +33,9 @@ export function books(state = new ReducerState(), action) {
   const { type } = action;
 
   switch (type) {
-    case booksConstants.API_BOOKS_REQUEST:
+    case booksConstants.LOAD_ALL_BOOKS_REQUEST:
+    case booksConstants.LOAD_BOOK_REQUEST:
+    case booksConstants.LOAD_CHAPTER_TEXT_REQUEST:
       return state.set("loading", true);
 
     case booksConstants.LOAD_ALL_BOOKS_SUCCESS:
@@ -54,7 +56,9 @@ export function books(state = new ReducerState(), action) {
         .set("error", null)
         .setIn(["entities", action.idBook, "chapters", action.idChapter, "chapter_content"], action.chapter_content);
 
-    case booksConstants.API_BOOKS_FAILURE:
+    case booksConstants.LOAD_ALL_BOOKS_FAILURE:
+    case booksConstants.LOAD_BOOK_FAILURE:
+    case booksConstants.LOAD_CHAPTER_TEXT_FAILURE:
       return state
         .set("loading", false)
         .set("error", true)

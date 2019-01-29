@@ -21,7 +21,9 @@ export function authors(state = new ReducerState(), action) {
   const { type } = action;
 
   switch (type) {
-    case authorsConstants.API_AUTHORS_REQUEST:
+    case authorsConstants.LOAD_ALL_AUTHORS_REQUEST:
+    case authorsConstants.LOAD_AUTHOR_REQUEST:
+    case adminConstants.UPDATE_AUTHOR_REQUEST:
       return state.set("loading", true);
 
     case authorsConstants.LOAD_ALL_AUTHORS_SUCCESS:
@@ -38,7 +40,9 @@ export function authors(state = new ReducerState(), action) {
         .set("error", null)
         .update("entities", entities => entities.merge(arrToMap([action.author], "id_author", AuthorRecord)));
 
-    case authorsConstants.API_AUTHORS_FAILURE:
+    case authorsConstants.LOAD_ALL_AUTHORS_FAILURE:
+    case authorsConstants.LOAD_AUTHOR_FAILURE:
+    case adminConstants.UPDATE_AUTHOR_FAILURE:
       return state
         .set("loading", false)
         .set("error", true)

@@ -18,9 +18,8 @@ const AuthPage = ({ signup, loading, location, redirectToReferrer, signIn, signU
 
   const handleSignIn = ({ userEmail, userPass }) => signIn(userEmail, userPass);
   // const handleSignIn = ({ userEmail, userPass }) => console.log("userEmail, userPass", userEmail, userPass);
-  // const handleSignUp = ({ userEmail, userPass }) => signUp(email, password);
-  const handleSignUp = ({ userEmail, userPass, reCaptcha }) =>
-    console.log("userEmail, userPass, reCaptcha", userEmail, userPass, reCaptcha);
+  const handleSignUp = ({ userEmail, userPass }) => signUp(userEmail, userPass);
+  // const handleSignUp = ({ userEmail, userPass, reCaptcha }) => console.log("userEmail, userPass, reCaptcha", userEmail, userPass, reCaptcha);
 
   const renderBody = () => {
     if (signup) {

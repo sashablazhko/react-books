@@ -21,7 +21,8 @@ export class ProtectedRoute extends Component {
 
 export default connect(
   state => ({
-    isAuthorized: isAuthorizedSelector(state),
+    // isAuthorized: isAuthorizedSelector(state),
+    isAuthorized: state.auth.user.expirationDate && parseInt(Date.now() / 1000, 10) < state.auth.user.expirationDate,
   }),
   null,
   null,

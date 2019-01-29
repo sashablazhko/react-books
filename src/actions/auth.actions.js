@@ -1,6 +1,4 @@
-import { authService as Auth } from "../services/AuthService";
-import Api from "../services/Api";
-import { Record } from "immutable";
+import { authService, authService as Auth } from "../services/AuthService";
 import { toast } from "react-toastify";
 // import { takeEvery, put, select } from "redux-saga/effects";
 import Cookies from "universal-cookie";
@@ -16,165 +14,178 @@ export function singInSuccess(email, serverToken) {
     const tokenData = decodeToken(serverToken);
     dispatch({
       type: authConstants.SIGN_IN_SUCCESS,
-      payload: {
-        email,
-        ...tokenData,
-      },
+      email,
+      ...tokenData,
     });
   };
 }
 
 export function signUp(email, password) {
   return dispatch => {
-    dispatch({
-      type: authConstants.API_AUTH_REQUEST,
-    });
+    dispatch(_request());
 
-    Auth.signUp(email, password).then(
-      res => {
-        if (res.data.message === "Successfully created user!") {
-          dispatch(signIn(email, password));
-        } else {
-          dispatch({
-            type: authConstants.API_AUTH_ERROR,
-          });
+    authService
+      .signUp(email, password)
+      .then(
+        message => {
+          debugger;
+          if (message === "Successfully created user") {
+            dispatch(signIn(email, password));
+          } else {
+            return Promise.reject("Проблемы с регистрацией");
+          }
+        },
+        err => {
+          debugger;
+          dispatch(_failure(err));
         }
+      )
+      .then(
+        data => data,
+        err => {
+          debugger;
+          dispatch(_failure(err));
+        }
+      );
+
+    // authService.signUp(email, password).then(
+    //   res => {
+    //     if (res.data.message === "Successfully created user!") {
+    //       dispatch(signIn(email, password));
+    //     } else {
+    //       dispatch({
+    //         type: authConstants.API_AUTH_FAILURE,
+    //       });
+    //     }
+    //   },
+    //   err => {
+    //     console.log("SIGN UP ERR", err);
+    //     dispatch({
+    //       type: authConstants.API_AUTH_FAILURE,
+    //       payload: {
+    //         errMsg: "Проблемы с регистрацией",
+    //       },
+    //     });
+    //     toast.error("Проблемы с регистрацией");
+    //   }
+    // );
+  };
+
+  function _request() {
+    return { type: authConstants.SIGN_UP_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: authConstants.SIGN_UP_FAILURE, errMsg };
+  }
+}
+
+export function signIn(email, password) {
+  return dispatch => {
+    dispatch(_request());
+
+    authService.login(email, password).then(
+      accessToken => {
+        dispatch(singInSuccess(email, accessToken));
       },
       err => {
-        console.log("SIGN UP ERR", err);
-        dispatch({
-          type: authConstants.API_AUTH_ERROR,
-          payload: {
-            errMsg: "Проблемы с регистрацией",
-          },
-        });
-        toast.error("Проблемы с регистрацией");
+        dispatch(_failure(err));
       }
     );
   };
-}
-
-// export function signIn(email, password) {
-//   return dispatch => {
-//     dispatch({
-//       type: authConstants.API_AUTH_REQUEST,
-//     });
-
-//     Auth.login(email, password).then(
-//       res => {
-//         console.log("res", res);
-//         dispatch(singInSuccess(email, res.data.access_token));
-//       },
-//       err => {
-//         console.log("SIGN IN ERR", err);
-//         dispatch({
-//           type: authConstants.API_AUTH_ERROR,
-//           payload: {
-//             errMsg: err.response.data.error,
-//           },
-//         });
-//         toast.error(err.response.data.error);
-//       }
-//     );
-//   };
-// }
-export function signIn(email, password) {
-  return async dispatch => {
-    dispatch({
-      type: authConstants.API_AUTH_REQUEST,
-    });
-
-    try {
-      const res = await Auth.login(email, password);
-      dispatch(singInSuccess(email, res.data.access_token));
-    } catch (err) {
-      console.log("SIGN IN ERR", err);
-      dispatch({
-        type: authConstants.API_AUTH_ERROR,
-        payload: {
-          errMsg: err.response.data.error,
-        },
-      });
-      toast.error(err.response.data.error);
-    }
-  };
+  function _request() {
+    return { type: authConstants.SIGN_IN_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: authConstants.SIGN_IN_FAILURE, errMsg };
+  }
 }
 
 export function me(accessToken) {
-  return async dispatch => {
-    dispatch({
-      type: authConstants.API_AUTH_REQUEST,
-    });
+  return dispatch => {
+    dispatch(_request());
 
-    Api().defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-    try {
-      const res = await Api().post("/auth/me");
-      dispatch(singInSuccess(res.data.email, accessToken));
-    } catch (err) {
-      console.log("ME ERR", err);
-      dispatch({
-        type: authConstants.API_AUTH_ERROR,
-        payload: {
-          errMsg: err.response.data.error,
-        },
-      });
-      toast.error(err.response.data.error);
-    }
+    authService.me(accessToken).then(
+      email => {
+        dispatch(singInSuccess(email, accessToken));
+      },
+      err => {
+        cookies.remove("ACCESS_TOKEN", { path: "/" });
+        dispatch(_failure(err));
+      }
+    );
   };
+
+  function _request() {
+    return { type: authConstants.ME_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: authConstants.ME_FAILURE, errMsg };
+  }
 }
 
 export function refreshToken(accessToken) {
-  return async dispatch => {
-    dispatch({
-      type: authConstants.API_AUTH_REQUEST,
-    });
+  return dispatch => {
+    dispatch(_request());
 
-    Api().defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-    try {
-      const res = await Api().post("/auth/refresh");
-      dispatch(me(res.data.access_token));
-    } catch (err) {
-      console.log("REFRESH ERR", err);
-      dispatch({
-        type: authConstants.API_AUTH_ERROR,
-        payload: {
-          errMsg: err.response.data.error,
-        },
-      });
-      toast.error(err.response.data.error);
-    }
+    authService.refres(accessToken).then(
+      newToken => {
+        dispatch(me(newToken));
+      },
+      err => {
+        cookies.remove("ACCESS_TOKEN", { path: "/" });
+        dispatch(_failure(err));
+      }
+    );
   };
+
+  function _request() {
+    return { type: authConstants.REFRESH_TOKEN_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: authConstants.REFRESH_TOKEN_FAILURE, errMsg };
+  }
 }
 
 export function signOut() {
-  return async dispatch => {
-    dispatch({
-      type: authConstants.API_AUTH_REQUEST,
-    });
+  return dispatch => {
+    dispatch(_request());
 
     const token = cookies.get("ACCESS_TOKEN");
-    Api().defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    try {
-      const {
-        data: { message },
-      } = await Api().post("/auth/logout");
-      if (message === "Successfully logged out") {
-        cookies.remove("ACCESS_TOKEN");
-        dispatch({
-          type: authConstants.SIGN_OUT_SUCCESS,
-        });
+    authService.logout(token).then(
+      message => {
+        cookies.remove("ACCESS_TOKEN", { path: "/" });
+        if (message === "Successfully logged out") {
+          dispatch(_success());
+        } else {
+          return Promise.reject("Проблемы с выходом");
+        }
+      },
+      err => {
+        cookies.remove("ACCESS_TOKEN", { path: "/" });
+        dispatch(_failure(err));
       }
-    } catch (err) {
-      console.log("SIGN OUT ERR", err);
-      dispatch({
-        type: authConstants.API_AUTH_ERROR,
-        payload: {
-          errMsg: err.response.data.error,
-        },
-      });
-      toast.error(err.response.data.error);
-    }
+    );
   };
+
+  function _success() {
+    return { type: authConstants.SIGN_OUT_SUCCESS };
+  }
+  function _request() {
+    return { type: authConstants.SIGN_OUT_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: authConstants.SIGN_OUT_FAILURE, errMsg };
+  }
 }
 
 // signOut redux-saga realization
@@ -204,7 +215,7 @@ export function signOut() {
 //   } catch (err) {
 //     console.log("SIGN OUT ERR", err);
 //     yield put({
-//       type: authConstants.SIGN_OUT_ERROR,
+//       type: authConstants.SIGN_OUT_FAILURE,
 //       payload: {
 //         errMsg: err.response.data.error,
 //       },
