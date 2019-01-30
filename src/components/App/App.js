@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import Loadable from "react-loadable";
 
-import ProtectedRoute from "../../hoc/ProtectedRoute/ProtectedRoute";
+import ProtectedRoute from "hoc/ProtectedRoute/ProtectedRoute";
 import Layout from "../../hoc/Layout/Layout";
 import HomePage from "../pages/HomePage/HomePage";
 import BookPage from "../pages/BookPage/BookPage";

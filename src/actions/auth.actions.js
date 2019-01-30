@@ -24,51 +24,20 @@ export function signUp(email, password) {
   return dispatch => {
     dispatch(_request());
 
-    authService
-      .signUp(email, password)
-      .then(
-        message => {
-          debugger;
-          if (message === "Successfully created user") {
-            dispatch(signIn(email, password));
-          } else {
-            return Promise.reject("Проблемы с регистрацией");
-          }
-        },
-        err => {
-          debugger;
-          dispatch(_failure(err));
+    authService.signUp(email, password).then(
+      message => {
+        debugger;
+        if (message === "Successfully created user!") {
+          dispatch(signIn(email, password));
+        } else {
+          toast.error("Проблемы с регистрацией");
         }
-      )
-      .then(
-        data => data,
-        err => {
-          debugger;
-          dispatch(_failure(err));
-        }
-      );
-
-    // authService.signUp(email, password).then(
-    //   res => {
-    //     if (res.data.message === "Successfully created user!") {
-    //       dispatch(signIn(email, password));
-    //     } else {
-    //       dispatch({
-    //         type: authConstants.API_AUTH_FAILURE,
-    //       });
-    //     }
-    //   },
-    //   err => {
-    //     console.log("SIGN UP ERR", err);
-    //     dispatch({
-    //       type: authConstants.API_AUTH_FAILURE,
-    //       payload: {
-    //         errMsg: "Проблемы с регистрацией",
-    //       },
-    //     });
-    //     toast.error("Проблемы с регистрацией");
-    //   }
-    // );
+      },
+      err => {
+        debugger;
+        dispatch(_failure(err));
+      }
+    );
   };
 
   function _request() {
@@ -165,7 +134,7 @@ export function signOut() {
         if (message === "Successfully logged out") {
           dispatch(_success());
         } else {
-          return Promise.reject("Проблемы с выходом");
+          toast.error("Проблемы с выходом");
         }
       },
       err => {
