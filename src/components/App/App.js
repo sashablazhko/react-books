@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import Loadable from "react-loadable";
 
 import ProtectedRoute from "hoc/ProtectedRoute/ProtectedRoute";
-import Layout from "../../hoc/Layout/Layout";
+import Layout from "hoc/Layout/Layout";
 import HomePage from "../pages/HomePage/HomePage";
 import BookPage from "../pages/BookPage/BookPage";
 import ChapterPage from "../pages/ChapterPage/ChapterPage";

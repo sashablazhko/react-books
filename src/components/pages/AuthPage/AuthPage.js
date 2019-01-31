@@ -10,9 +10,12 @@ import Sign from "../../auth/Sign/Sign";
 
 import bg from "../../../resources/images/bg.jpg";
 
-const AuthPage = ({ signup, loading, location, redirectToReferrer, signIn, signUp }) => {
+const AuthPage = ({ signup, loading, location, redirectToReferrer, idUser, isAuthorized, signIn, signUp }) => {
   const { from } = location.state || { from: { pathname: "/" } };
-  if (redirectToReferrer) {
+  console.log("loadingAuth", loading);
+  if (idUser && !isAuthorized) {
+    return <Redirect to="/" />;
+  } else if (redirectToReferrer) {
     return <Redirect to={from} />;
   }
 
@@ -42,6 +45,8 @@ export default connect(
   state => ({
     loading: state.auth.loading,
     redirectToReferrer: state.auth.redirectToReferrer,
+    isAuthorized: state.auth.user.expirationDate && parseInt(Date.now() / 1000, 10) < state.auth.user.expirationDate,
+    idUser: state.auth.user.id,
   }),
   { signUp, signIn }
 )(AuthPage);

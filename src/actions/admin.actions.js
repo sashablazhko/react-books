@@ -4,7 +4,7 @@ import { adminConstants } from "../constants/admin.constants";
 import { adminService } from "../services/AdminService";
 
 export function updateAuthor(id, author_name) {
-  return async dispatch => {
+  return dispatch => {
     dispatch(_request());
 
     adminService.updateAuthor(id, author_name).then(
@@ -30,5 +30,25 @@ export function updateAuthor(id, author_name) {
     const errMsg = (err.response && err.response.data.error) || err.toString();
     toast.error(errMsg);
     return { type: adminConstants.UPDATE_AUTHOR_FAILURE, errMsg };
+  }
+}
+
+export function uploadBookImg(file, id) {
+  return dispatch => {
+    dispatch(_request());
+
+    adminService.uploadBookImg(file, id);
+  };
+
+  function _success(author) {
+    return { type: adminConstants.UPLOAD_BOOK_IMG_SUCCESS, author };
+  }
+  function _request() {
+    return { type: adminConstants.UPLOAD_BOOK_IMG_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: adminConstants.UPLOAD_BOOK_IMG_FAILURE, errMsg };
   }
 }

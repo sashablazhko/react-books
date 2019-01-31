@@ -18,13 +18,16 @@ class BookEdit extends Component {
     };
     this.formRef = React.createRef();
     this.bookImgRef = React.createRef();
-    this.handleImgUpload = this.handleImgUpload.bind(this);
+    this.handleUploadImg = this.handleUploadImg.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
 
-  handleImgUpload(e) {
+  handleUploadImg(e) {
     e.preventDefault();
-    console.log("this.bookImgRef.current.files", this.bookImgRef.current.files[0]);
+    const file = this.bookImgRef.current.files[0];
+    if (file) {
+      this.props.onUploadImg(file);
+    }
   }
 
   handleCancel() {
@@ -73,7 +76,7 @@ class BookEdit extends Component {
                 <img src={`${apiHost}/uploads/${book.book_img}`} alt={book.book_name} />
                 <p>{`${apiHost}/uploads/${book.book_img}`}</p>
                 <input type="file" name="bookImg" ref={this.bookImgRef} />
-                <button onClick={this.handleImgUpload}>Загрузить</button>
+                <button onClick={this.handleUploadImg}>Загрузить</button>
               </div>
               <Field name="book_description" placeholder="Описание">
                 {({ input, meta, placeholder }) => (
