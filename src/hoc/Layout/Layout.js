@@ -19,21 +19,21 @@ export class Layout extends Component {
     this.state = {
       menu: false,
     };
-    this.cookies = new Cookies();
+    // this.cookies = new Cookies();
   }
 
-  componentDidMount() {
-    const { expirationDate, me, refreshToken } = this.props;
-    const accessToken = this.cookies.get("ACCESS_TOKEN");
-    if (accessToken) {
-      const tokenData = decodeToken(accessToken);
-      if (!isExpired(tokenData.expirationDate) && !expirationDate) {
-        me(accessToken);
-      } else if (isExpired(tokenData.expirationDate) && !expirationDate) {
-        refreshToken(accessToken);
-      }
-    }
-  }
+  // componentDidMount() {
+  //   const { expirationDate, me, refreshToken } = this.props;
+  //   const accessToken = this.cookies.get("ACCESS_TOKEN");
+  //   if (accessToken) {
+  //     const tokenData = decodeToken(accessToken);
+  //     if (!isExpired(tokenData.expirationDate) && !expirationDate) {
+  //       me(accessToken);
+  //     } else if (isExpired(tokenData.expirationDate) && !expirationDate) {
+  //       refreshToken(accessToken);
+  //     }
+  //   }
+  // }
 
   toggleMenuHandler = () => {
     this.setState({
@@ -64,10 +64,10 @@ export class Layout extends Component {
 
 export default connect(
   state => ({
-    expirationDate: state.auth.user.expirationDate,
+    // expirationDate: state.auth.user.expirationDate,
     loading: state.auth.loading,
   }),
-  { me, refreshToken },
+  null,
   null,
   { pure: false }
 )(Layout);
