@@ -37,6 +37,6 @@ export function handleResponse(res) {
     const err = (data && data.error) || (data && data.message) || res.statusText;
     return Promise.reject(err);
   }
-
+  console.log("data", data);
   return data;
 }

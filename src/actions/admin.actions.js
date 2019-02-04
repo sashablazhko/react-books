@@ -9,13 +9,12 @@ export function updateAuthor(id, author_name) {
 
     adminService.updateAuthor(id, author_name).then(
       author => {
-        console.log("author", author);
         dispatch(_success(author));
         dispatch(push("/admin/authors"));
       },
       err => {
-        dispatch(_failure(err.toString()));
-        toast.error(err.toString());
+        dispatch(_failure(err));
+        toast.error(err);
       }
     );
   };
@@ -33,15 +32,23 @@ export function updateAuthor(id, author_name) {
   }
 }
 
-export function uploadBookImg(file, id) {
+export function uploadBookImg(file, idBook) {
   return dispatch => {
     dispatch(_request());
 
-    adminService.uploadBookImg(file, id);
+    adminService.uploadBookImg(file, idBook).then(
+      imgName => {
+        dispatch(_success(imgName, idBook));
+      },
+      err => {
+        dispatch(_failure(err));
+        toast.error(err);
+      }
+    );
   };
 
-  function _success(author) {
-    return { type: adminConstants.UPLOAD_BOOK_IMG_SUCCESS, author };
+  function _success(imgName, idBook) {
+    return { type: adminConstants.UPLOAD_BOOK_IMG_SUCCESS, imgName, idBook };
   }
   function _request() {
     return { type: adminConstants.UPLOAD_BOOK_IMG_REQUEST };
@@ -50,5 +57,33 @@ export function uploadBookImg(file, id) {
     const errMsg = (err.response && err.response.data.error) || err.toString();
     toast.error(errMsg);
     return { type: adminConstants.UPLOAD_BOOK_IMG_FAILURE, errMsg };
+  }
+}
+
+export function deleteBookImg(idBook) {
+  return dispatch => {
+    dispatch(_request());
+
+    adminService.deleteBookImg(idBook).then(
+      imgName => {
+        dispatch(_success(imgName, idBook));
+      },
+      err => {
+        dispatch(_failure(err));
+        toast.error(err);
+      }
+    );
+  };
+
+  function _success(imgName, idBook) {
+    return { type: adminConstants.DELETE_BOOK_IMG_SUCCESS, imgName, idBook };
+  }
+  function _request() {
+    return { type: adminConstants.DELETE_BOOK_IMG_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: adminConstants.DELETE_BOOK_IMG_FAILURE, errMsg };
   }
 }

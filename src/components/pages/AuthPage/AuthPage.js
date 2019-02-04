@@ -11,6 +11,7 @@ import Sign from "../../auth/Sign/Sign";
 import { decodeToken, isExpired } from "../../../helpers";
 
 import bg from "../../../resources/images/bg.jpg";
+import Loader from "../../UI/Loader/Loader";
 
 class AuthPage extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class AuthPage extends Component {
       const tokenData = decodeToken(accessToken);
       if (!isExpired(tokenData.expirationDate) && !expirationDate) {
         me(accessToken);
-      } else if (isExpired(tokenData.expirationDate) && !expirationDate) {
+      } else if (isExpired(tokenData.expirationDate) && !!expirationDate) {
         refreshToken(accessToken);
       }
     }
@@ -46,9 +47,12 @@ class AuthPage extends Component {
   };
 
   render() {
-    const { loading, location, redirectToReferrer, idUser, isAuthorized } = this.props;
+    const { loading, location, redirectToReferrer, idUser, isAuthorized, expirationDate } = this.props;
     const { from } = location.state || { from: { pathname: "/" } };
     console.log("loadingAuth", loading);
+    // if (expirationDate && !isAuthorized) {
+    //   return <Loader />;
+    // }
     if (redirectToReferrer) {
       return <Redirect to={from} />;
     }
@@ -68,7 +72,6 @@ export default connect(
     redirectToReferrer: state.auth.redirectToReferrer,
     expirationDate: state.auth.user.expirationDate,
     isAuthorized: state.auth.user.expirationDate && parseInt(Date.now() / 1000, 10) < state.auth.user.expirationDate,
-    idUser: state.auth.user.id,
   }),
   { signUp, signIn, me, refreshToken },
   null,

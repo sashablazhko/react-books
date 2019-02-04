@@ -15,5 +15,6 @@ export default () => {
 export const axiosClear = () => {
   return axios.create({
     baseURL: `${apiHost}/api`,
+    withCredentials: false,
   });
 };

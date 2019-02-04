@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classes from "./AdminBookPage.module.css";
 import { connect } from "react-redux";
 
-import { loadBook, loadAllAuthors, uploadBookImg } from "../../../../actions";
+import { loadBook, loadAllAuthors, uploadBookImg, deleteBookImg } from "../../../../actions";
 import BookEdit from "./BookEdit/BookEdit";
 import Loader from "../../../UI/Loader/Loader";
 
@@ -22,6 +22,7 @@ class AdminBookPage extends Component {
   };
   handleDelete = () => {};
   handleUploadBookImg = file => this.props.uploadBookImg(file, this.props.match.params.idBook);
+  handleDeleteBookImg = () => this.props.deleteBookImg(this.props.match.params.idBook);
 
   render() {
     const { create, book, loadingBook, authors, loadingAuthors } = this.props;
@@ -32,6 +33,7 @@ class AdminBookPage extends Component {
           <BookEdit
             onSubmit={this.handleCreate}
             onUploadImg={this.handleUploadBookImg}
+            onDeleteImg={this.handleDeleteBookImg}
             loadingBook={loadingBook}
             loadingAuthors={loadingAuthors}
           />
@@ -41,6 +43,7 @@ class AdminBookPage extends Component {
           <BookEdit
             onSubmit={this.handleEdit}
             onUploadImg={this.handleUploadBookImg}
+            onDeleteImg={this.handleDeleteBookImg}
             book={book}
             authors={authors}
             loadingBook={loadingBook}
@@ -64,5 +67,5 @@ export default connect(
     book: state.books.entities.get(ownProps.match.params.idBook),
     authors: state.authors.entities,
   }),
-  { loadBook, loadAllAuthors, uploadBookImg }
+  { loadBook, loadAllAuthors, uploadBookImg, deleteBookImg }
 )(AdminBookPage);

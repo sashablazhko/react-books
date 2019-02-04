@@ -8,7 +8,6 @@ import Loader from "../../../../UI/Loader/Loader";
 class AuthorEdit extends Component {
   constructor(props) {
     super(props);
-    this.state = { author_name: this.props.author.author_name };
     this.formRef = React.createRef();
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -19,10 +18,11 @@ class AuthorEdit extends Component {
 
   render() {
     const { author, onSubmit, loading } = this.props;
+    const initData = { author_name: this.props.author.author_name };
     return (
       <div className={classes.AuthorEdit}>
         <h2>{!author ? "Новый автор" : "Редактировать автора"}</h2>
-        <Form initialValues={this.state} onSubmit={onSubmit} ref={this.formRef}>
+        <Form initialValues={initData} onSubmit={onSubmit} ref={this.formRef}>
           {({ handleSubmit, values, submitting, pristine }) => (
             <form onSubmit={handleSubmit}>
               <Field name="author_name" placeholder="Автор">

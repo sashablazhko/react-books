@@ -2,6 +2,7 @@ import { OrderedMap, Record } from "immutable";
 
 import { booksConstants } from "../../constants/books.constants";
 import { arrToMap } from "../../helpers";
+import { adminConstants } from "../../constants/admin.constants";
 
 const BookRecord = Record({
   id_book: null,
@@ -55,6 +56,10 @@ export function books(state = new ReducerState(), action) {
         .set("loading", false)
         .set("error", null)
         .setIn(["entities", action.idBook, "chapters", action.idChapter, "chapter_content"], action.chapter_content);
+
+    case adminConstants.UPLOAD_BOOK_IMG_SUCCESS:
+    case adminConstants.DELETE_BOOK_IMG_SUCCESS:
+      return state.setIn(["entities", action.idBook, "book_img"], action.imgName);
 
     case booksConstants.LOAD_ALL_BOOKS_FAILURE:
     case booksConstants.LOAD_BOOK_FAILURE:
