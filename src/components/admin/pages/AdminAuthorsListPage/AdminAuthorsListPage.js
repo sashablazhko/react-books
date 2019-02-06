@@ -34,11 +34,11 @@ class AdminAuthorsListPage extends Component {
         <input type="text" value={searchTerm} onChange={this.handlerOnChange} placeholder="Поиск" />
         <ul className={classes.AdminAuthorsListPage}>
           {mapToArr(authors)
-            .filter(author => `${author.author_name}`.toUpperCase().indexOf(searchTerm.trim().toUpperCase()) >= 0)
+            .filter(author => `${author.authorName}`.toUpperCase().indexOf(searchTerm.trim().toUpperCase()) >= 0)
             .map(author => {
               return (
-                <li key={author.id_author}>
-                  <Link to={`/admin/authors/${author.id_author}`}>{author.author_name}</Link>
+                <li key={author.idAuthor}>
+                  <Link to={`/admin/authors/${author.idAuthor}`}>{author.authorName}</Link>
                 </li>
               );
             })}

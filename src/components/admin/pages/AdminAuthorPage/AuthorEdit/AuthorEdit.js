@@ -18,14 +18,14 @@ class AuthorEdit extends Component {
 
   render() {
     const { author, onSubmit, loading } = this.props;
-    const initData = { author_name: this.props.author.author_name };
+    const initData = { authorName: this.props.author.authorName };
     return (
       <div className={classes.AuthorEdit}>
         <h2>{!author ? "Новый автор" : "Редактировать автора"}</h2>
         <Form initialValues={initData} onSubmit={onSubmit} ref={this.formRef}>
           {({ handleSubmit, values, submitting, pristine }) => (
             <form onSubmit={handleSubmit}>
-              <Field name="author_name" placeholder="Автор">
+              <Field name="authorName" placeholder="Автор">
                 {({ input, meta, placeholder }) => (
                   <div>
                     <label>Автор (ФИ)</label>

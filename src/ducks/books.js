@@ -6,22 +6,22 @@ import { toast } from "react-toastify";
 import { loadAllAuthors } from "./authors";
 
 const BookRecord = Record({
-  id_book: null,
-  book_name: null,
-  author_id: null,
-  author_name: null,
-  book_img: null,
-  book_description: null,
+  idBook: null,
+  bookName: null,
+  authorId: null,
+  authorName: null,
+  bookImg: null,
+  bookDescription: null,
   chapters: new OrderedMap({}),
-  updated_at: null,
+  updatedAt: null,
 });
 
 const ChapterRecord = Record({
-  id_chapter: null,
-  chapter_number: null,
-  chapter_name: null,
-  chapter_content: null,
-  book_id: null,
+  idChapter: null,
+  chapterNumber: null,
+  chapterName: null,
+  chapterContent: null,
+  bookId: null,
 });
 
 const ReducerState = Record({
@@ -49,19 +49,19 @@ export default function reducer(state = new ReducerState(), action) {
       return state
         .set("loading", false)
         .set("error", null)
-        .update("entities", entities => arrToMap(payload.books, "id_book", BookRecord).merge(entities));
+        .update("entities", entities => arrToMap(payload.books, "idBook", BookRecord).merge(entities));
 
     case LOAD_BOOK_SUCCESS:
       return state
         .set("loading", false)
         .set("error", null)
-        .update("entities", entities => arrToMap([payload.book], "id_book", BookRecord).merge(entities));
+        .update("entities", entities => arrToMap([payload.book], "idBook", BookRecord).merge(entities));
 
     case LOAD_CHAPTER_TEXT_SUCCESS:
       return state
         .set("loading", false)
         .set("error", null)
-        .setIn(["entities", payload.idBook, "chapters", payload.idChapter, "chapter_content"], payload.chapter_content);
+        .setIn(["entities", payload.idBook, "chapters", payload.idChapter, "chapterContent"], payload.chapterContent);
 
     case API_BOOKS_ERROR:
       return state
@@ -84,7 +84,7 @@ export function loadAllBooks() {
       res => {
         const { data } = res;
         const books = data.map(item => {
-          item.chapters = arrToMap(item.chapters, "id_chapter", ChapterRecord);
+          item.chapters = arrToMap(item.chapters, "idChapter", ChapterRecord);
           return item;
         });
         dispatch({
@@ -119,7 +119,7 @@ export function loadBook(id, withAurhorsList = false) {
 
     try {
       const res = await Books.getBook(id);
-      const chapters = arrToMap(res.data.chapters, "id_chapter", ChapterRecord);
+      const chapters = arrToMap(res.data.chapters, "idChapter", ChapterRecord);
       const book = { ...res.data, chapters };
       dispatch({
         type: LOAD_BOOK_SUCCESS,
@@ -151,13 +151,13 @@ export function loadChapterText(idBook, idChapter, loadBookInfo) {
         dispatch(loadBook(idBook));
       }
       const res = await Books.getChapterText(idBook, idChapter);
-      const { chapter_content } = res.data;
+      const { chapterContent } = res.data;
       dispatch({
         type: LOAD_CHAPTER_TEXT_SUCCESS,
         payload: {
           idBook,
           idChapter,
-          chapter_content,
+          chapterContent,
         },
       });
     } catch (err) {

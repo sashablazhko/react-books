@@ -5,22 +5,22 @@ import { arrToMap } from "../../helpers";
 import { adminConstants } from "../../constants/admin.constants";
 
 const BookRecord = Record({
-  id_book: null,
-  book_name: null,
-  author_id: null,
-  author_name: null,
-  book_img: null,
-  book_description: null,
+  idBook: null,
+  bookName: null,
+  authorId: null,
+  authorName: null,
+  bookImg: null,
+  bookDescription: null,
   chapters: new OrderedMap({}),
-  updated_at: null,
+  updatedAt: null,
 });
 
 export const ChapterRecord = Record({
-  id_chapter: null,
-  chapter_number: null,
-  chapter_name: null,
-  chapter_content: null,
-  book_id: null,
+  idChapter: null,
+  chapterNumber: null,
+  chapterName: null,
+  chapterContent: null,
+  bookId: null,
 });
 
 const ReducerState = Record({
@@ -43,23 +43,23 @@ export function books(state = new ReducerState(), action) {
       return state
         .set("loading", false)
         .set("error", null)
-        .update("entities", entities => arrToMap(action.books, "id_book", BookRecord).merge(entities));
+        .update("entities", entities => arrToMap(action.books, "idBook", BookRecord).merge(entities));
 
     case booksConstants.LOAD_BOOK_SUCCESS:
       return state
         .set("loading", false)
         .set("error", null)
-        .update("entities", entities => arrToMap([action.book], "id_book", BookRecord).merge(entities));
+        .update("entities", entities => arrToMap([action.book], "idBook", BookRecord).merge(entities));
 
     case booksConstants.LOAD_CHAPTER_TEXT_SUCCESS:
       return state
         .set("loading", false)
         .set("error", null)
-        .setIn(["entities", action.idBook, "chapters", action.idChapter, "chapter_content"], action.chapter_content);
+        .setIn(["entities", action.idBook, "chapters", action.idChapter, "chapterContent"], action.chapterContent);
 
-    case adminConstants.UPLOAD_BOOK_IMG_SUCCESS:
-    case adminConstants.DELETE_BOOK_IMG_SUCCESS:
-      return state.setIn(["entities", action.idBook, "book_img"], action.imgName);
+    case adminConstants.UPLOAD_bookImg_SUCCESS:
+    case adminConstants.DELETE_bookImg_SUCCESS:
+      return state.setIn(["entities", action.idBook, "bookImg"], action.imgName);
 
     case booksConstants.LOAD_ALL_BOOKS_FAILURE:
     case booksConstants.LOAD_BOOK_FAILURE:

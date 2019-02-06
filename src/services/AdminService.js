@@ -17,14 +17,14 @@ function updateAuthor(idAuthor, authorName) {
   Api().defaults.headers.common["Authorization"] = `Bearer ${token}`;
   return Api()
     .put(`/admin/updateauthor/${idAuthor}`, {
-      author_name: authorName,
+      authorName: authorName,
     })
     .then(handleResponse);
 }
 
 function addAuthor(authorName) {
   return Api().post(`/admin/addauthor`, {
-    author_name: authorName,
+    authorName: authorName,
   });
 }
 

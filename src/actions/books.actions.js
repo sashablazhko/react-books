@@ -6,6 +6,7 @@ import { loadAllAuthors } from "./authors.actions";
 export function loadAllBooks() {
   return dispatch => {
     dispatch(_request());
+    dispatch(loadAllAuthors());
 
     booksService.getBooks().then(
       books => {
@@ -67,8 +68,8 @@ export function loadChapterText(idBook, idChapter, loadBookInfo) {
       dispatch(loadBook(idBook));
     }
     booksService.getChapterText(idBook, idChapter).then(
-      chapter_content => {
-        dispatch(_success(idBook, idChapter, chapter_content));
+      chapterContent => {
+        dispatch(_success(idBook, idChapter, chapterContent));
       },
       err => {
         dispatch(_failure(err));
@@ -76,8 +77,8 @@ export function loadChapterText(idBook, idChapter, loadBookInfo) {
     );
   };
 
-  function _success(idBook, idChapter, chapter_content) {
-    return { type: booksConstants.LOAD_CHAPTER_TEXT_SUCCESS, idBook, idChapter, chapter_content };
+  function _success(idBook, idChapter, chapterContent) {
+    return { type: booksConstants.LOAD_CHAPTER_TEXT_SUCCESS, idBook, idChapter, chapterContent };
   }
   function _request() {
     return { type: booksConstants.LOAD_CHAPTER_TEXT_REQUEST };

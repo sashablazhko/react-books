@@ -21,7 +21,7 @@ export function admin(state = new ReducerState(), action) {
     //   return state
     //     .set("loading", false)
     //     .set("error", null)
-    //     .update("entities", entities => entities.merge(arrToMap([action.author], "id_author", AuthorRecord)));
+    //     .update("entities", entities => entities.merge(arrToMap([action.author], "idAuthor", AuthorRecord)));
 
     case adminConstants.API_ADMIN_FAILURE:
       return state

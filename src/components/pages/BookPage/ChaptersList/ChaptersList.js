@@ -9,8 +9,8 @@ const ChaptersList = ({ chapters }) => {
     <ul className={classes.ChaptersList}>
       {mapToArr(chapters).map(chapter => {
         return (
-          <li key={chapter.id_chapter}>
-            <Link to={`${chapter.book_id}/${chapter.id_chapter}`}>{chapter.chapter_name}</Link>
+          <li key={chapter.idChapter}>
+            <Link to={`${chapter.bookId}/${chapter.idChapter}`}>{chapter.chapterName}</Link>
           </li>
         );
       })}

@@ -12,6 +12,7 @@ import Drawer from "../../components/Navigation/Drawer/Drawer";
 import { me, refreshToken } from "../../actions";
 import { decodeToken, isExpired } from "../../helpers";
 import Loader from "../../components/UI/Loader/Loader";
+import { authLoading } from "../../selectors";
 
 export class Layout extends Component {
   constructor(props) {
@@ -65,7 +66,7 @@ export class Layout extends Component {
 export default connect(
   state => ({
     // expirationDate: state.auth.user.expirationDate,
-    loading: state.auth.loading,
+    loading: authLoading(state),
   }),
   null,
   null,

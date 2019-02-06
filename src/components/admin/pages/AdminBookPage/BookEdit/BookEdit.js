@@ -27,7 +27,7 @@ class BookEdit extends Component {
 
   handleDeleteImg(e) {
     e.preventDefault();
-    if (this.props.book.book_img !== "noimage.jpg") {
+    if (this.props.book.bookImg !== "noimage.jpg") {
       this.props.onDeleteImg();
     }
   }
@@ -39,10 +39,10 @@ class BookEdit extends Component {
   render() {
     const { book, onSubmit, loadingBook, authors, loadingAuthors, onDeleteImg } = this.props;
     const initData = {
-      book_name: book.book_name,
-      author_id: book.author_id,
-      book_img: book.book_img,
-      book_description: book.book_description,
+      bookName: book.bookName,
+      authorId: book.authorId,
+      bookImg: book.bookImg,
+      bookDescription: book.bookDescription,
     };
     return (
       <div className={classes.BookEdit}>
@@ -50,7 +50,7 @@ class BookEdit extends Component {
         <Form initialValues={initData} onSubmit={onSubmit} ref={this.formRef}>
           {({ handleSubmit, values, submitting, pristine }) => (
             <form onSubmit={handleSubmit}>
-              <Field name="book_name" placeholder="Название книги">
+              <Field name="bookName" placeholder="Название книги">
                 {({ input, meta, placeholder }) => (
                   <div className="row">
                     <label>{placeholder}</label>
@@ -59,7 +59,7 @@ class BookEdit extends Component {
                   </div>
                 )}
               </Field>
-              <Field name="author_id" placeholder="Автор" component="select">
+              <Field name="authorId" placeholder="Автор" component="select">
                 {({ input, meta, placeholder }) => {
                   return (
                     <div className="row">
@@ -67,8 +67,8 @@ class BookEdit extends Component {
                       <select value={input.value} {...input}>
                         {mapToArr(authors).map(author => {
                           return (
-                            <option value={author.id_author} key={author.id_author}>
-                              {author.author_name}
+                            <option value={author.idAuthor} key={author.idAuthor}>
+                              {author.authorName}
                             </option>
                           );
                         })}
@@ -81,16 +81,16 @@ class BookEdit extends Component {
 
               <div className="row">
                 <label>Обложка</label>
-                <img src={`${apiHost}/uploads/${book.book_img}`} alt={book.book_name} />
-                <p>{`${apiHost}/uploads/${book.book_img}`}</p>
+                <img src={`${apiHost}/uploads/${book.bookImg}`} alt={book.bookName} />
+                <p>{`${apiHost}/uploads/${book.bookImg}`}</p>
 
                 <input
                   type="text"
                   name="bookImgString"
-                  value={`${apiHost}/uploads/${book.book_img}`}
+                  value={`${apiHost}/uploads/${book.bookImg}`}
                   onChange={() => {}}
                 />
-                <Field name="book_img" placeholder="Изображение">
+                <Field name="bookImg" placeholder="Изображение">
                   {({ input, meta, placeholder }) => (
                     <div className="row">
                       <label>{placeholder}</label>
@@ -104,7 +104,7 @@ class BookEdit extends Component {
                 <button onClick={this.handleUploadImg}>Загрузить</button>
                 <button onClick={this.handleDeleteImg}>Удалить</button>
               </div>
-              <Field name="book_description" placeholder="Описание">
+              <Field name="bookDescription" placeholder="Описание">
                 {({ input, meta, placeholder }) => (
                   <div className="row">
                     <label>{placeholder}</label>

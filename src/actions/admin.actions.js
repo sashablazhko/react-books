@@ -3,11 +3,11 @@ import { push } from "connected-react-router";
 import { adminConstants } from "../constants/admin.constants";
 import { adminService } from "../services/AdminService";
 
-export function updateAuthor(id, author_name) {
+export function updateAuthor(id, authorName) {
   return dispatch => {
     dispatch(_request());
 
-    adminService.updateAuthor(id, author_name).then(
+    adminService.updateAuthor(id, authorName).then(
       author => {
         dispatch(_success(author));
         dispatch(push("/admin/authors"));
@@ -48,15 +48,15 @@ export function uploadBookImg(file, idBook) {
   };
 
   function _success(imgName, idBook) {
-    return { type: adminConstants.UPLOAD_BOOK_IMG_SUCCESS, imgName, idBook };
+    return { type: adminConstants.UPLOAD_bookImg_SUCCESS, imgName, idBook };
   }
   function _request() {
-    return { type: adminConstants.UPLOAD_BOOK_IMG_REQUEST };
+    return { type: adminConstants.UPLOAD_bookImg_REQUEST };
   }
   function _failure(err) {
     const errMsg = (err.response && err.response.data.error) || err.toString();
     toast.error(errMsg);
-    return { type: adminConstants.UPLOAD_BOOK_IMG_FAILURE, errMsg };
+    return { type: adminConstants.UPLOAD_bookImg_FAILURE, errMsg };
   }
 }
 
@@ -76,14 +76,14 @@ export function deleteBookImg(idBook) {
   };
 
   function _success(imgName, idBook) {
-    return { type: adminConstants.DELETE_BOOK_IMG_SUCCESS, imgName, idBook };
+    return { type: adminConstants.DELETE_bookImg_SUCCESS, imgName, idBook };
   }
   function _request() {
-    return { type: adminConstants.DELETE_BOOK_IMG_REQUEST };
+    return { type: adminConstants.DELETE_bookImg_REQUEST };
   }
   function _failure(err) {
     const errMsg = (err.response && err.response.data.error) || err.toString();
     toast.error(errMsg);
-    return { type: adminConstants.DELETE_BOOK_IMG_FAILURE, errMsg };
+    return { type: adminConstants.DELETE_bookImg_FAILURE, errMsg };
   }
 }

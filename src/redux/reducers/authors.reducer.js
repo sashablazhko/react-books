@@ -5,8 +5,8 @@ import { adminConstants } from "../../constants/admin.constants";
 import { arrToMap } from "../../helpers";
 
 export const AuthorRecord = Record({
-  id_author: null,
-  author_name: null,
+  idAuthor: null,
+  authorName: null,
 });
 
 const ReducerState = Record({
@@ -31,14 +31,14 @@ export function authors(state = new ReducerState(), action) {
         .set("loading", false)
         .set("listLoaded", true)
         .set("error", null)
-        .update("entities", entities => arrToMap(action.authors, "id_author", AuthorRecord).merge(entities));
+        .update("entities", entities => arrToMap(action.authors, "idAuthor", AuthorRecord).merge(entities));
 
     case authorsConstants.LOAD_AUTHOR_SUCCESS:
     case adminConstants.UPDATE_AUTHOR_SUCCESS:
       return state
         .set("loading", false)
         .set("error", null)
-        .update("entities", entities => entities.merge(arrToMap([action.author], "id_author", AuthorRecord)));
+        .update("entities", entities => entities.merge(arrToMap([action.author], "idAuthor", AuthorRecord)));
 
     case authorsConstants.LOAD_ALL_AUTHORS_FAILURE:
     case authorsConstants.LOAD_AUTHOR_FAILURE:

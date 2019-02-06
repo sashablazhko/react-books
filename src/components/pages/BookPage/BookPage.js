@@ -20,17 +20,17 @@ class BookPage extends Component {
     if (loading || !book) return <Loader />;
     const {
       chapters,
-      book: { book_name, author_name, book_description },
+      book: { bookName, authorName, bookDescription },
     } = this.props;
     return (
       <div className={classes.BookPage} style={{ background: `url(${bg})` }}>
         <div className="container background">
-          <h1>{book_name}</h1>
+          <h1>{bookName}</h1>
           <h3>Главы:</h3>
           <ChaptersList chapters={chapters} />
-          <p>Автор: {author_name}</p>
+          <p>Автор: {authorName}</p>
           <h4>О книге:</h4>
-          <p>{book_description}</p>
+          <p>{bookDescription}</p>
         </div>
       </div>
     );

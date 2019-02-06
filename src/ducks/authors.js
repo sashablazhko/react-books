@@ -9,8 +9,8 @@ import { push } from "connected-react-router";
 const cookies = new Cookies();
 
 const AuthorRecord = Record({
-  id_author: null,
-  author_name: null,
+  idAuthor: null,
+  authorName: null,
 });
 
 const ReducerState = Record({
@@ -40,13 +40,13 @@ export default function reducer(state = new ReducerState(), action) {
         .set("loading", false)
         .set("listLoaded", true)
         .set("error", null)
-        .update("entities", entities => arrToMap(payload.authors, "id_author", AuthorRecord).merge(entities));
+        .update("entities", entities => arrToMap(payload.authors, "idAuthor", AuthorRecord).merge(entities));
 
     case LOAD_AUTHOR_SUCCESS:
       return state
         .set("loading", false)
         .set("error", null)
-        .update("entities", entities => entities.merge(arrToMap([payload.author], "id_author", AuthorRecord)));
+        .update("entities", entities => entities.merge(arrToMap([payload.author], "idAuthor", AuthorRecord)));
 
     case UPDATE_AUTHOR_SUCCESS:
       return state.set("loading", false).set("error", null);
@@ -116,7 +116,7 @@ export function loadAuthor(id) {
   };
 }
 
-export function updateAuthor(id, author_name) {
+export function updateAuthor(id, authorName) {
   return async dispatch => {
     dispatch({
       type: API_AUTHORS_REQUEST,
@@ -128,7 +128,7 @@ export function updateAuthor(id, author_name) {
       const {
         status,
         data: { author },
-      } = await Api().put(`/admin/updateauthor/${id}`, { author_name });
+      } = await Api().put(`/admin/updateauthor/${id}`, { authorName });
       if (status === 200) {
         dispatch({
           type: LOAD_AUTHOR_SUCCESS,

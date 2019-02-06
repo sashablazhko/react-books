@@ -1,5 +1,7 @@
 import { createSelector } from "reselect";
 
+export const authLoading = state => state.auth.loading;
+
 const expirationDateGetter = state => state.auth.user.expirationDate;
 
 export const isAuthorizedSelector = createSelector(

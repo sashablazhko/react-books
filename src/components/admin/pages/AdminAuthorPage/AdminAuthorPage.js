@@ -15,8 +15,8 @@ class AdminAuthorPage extends Component {
   }
 
   handleCreate = () => {};
-  handleEdit = ({ author_name }) => {
-    this.props.updateAuthor(this.props.author.id_author, author_name);
+  handleEdit = ({ authorName }) => {
+    this.props.updateAuthor(this.props.author.idAuthor, authorName);
   };
   handleDelete = () => {};
 

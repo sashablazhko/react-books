@@ -9,7 +9,7 @@ class Chapter extends Component {
   componentDidMount() {
     const { chapter, loading, loadChapterText, match } = this.props;
     const loadBookInfo = !chapter;
-    const loadChaptertext = !chapter || (!!chapter && !chapter.chapter_content);
+    const loadChaptertext = !chapter || (!!chapter && !chapter.chapterContent);
     if (!loading && loadChaptertext) {
       loadChapterText(match.params.idBook, match.params.idChapter, loadBookInfo);
     }
@@ -19,13 +19,13 @@ class Chapter extends Component {
     const { loading, chapter } = this.props;
     if (loading || !chapter) return <Loader />;
     const {
-      chapter: { chapter_name, chapter_content },
+      chapter: { chapterName, chapterContent },
     } = this.props;
     return (
       <div className={classes.ChapterPage}>
         <div className="container background">
-          <p>{chapter_name}</p>
-          <p dangerouslySetInnerHTML={{ __html: chapter_content }} />
+          <p>{chapterName}</p>
+          <p dangerouslySetInnerHTML={{ __html: chapterContent }} />
         </div>
       </div>
     );

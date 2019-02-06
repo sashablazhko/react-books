@@ -14,7 +14,7 @@ function getBooks() {
     .then(handleResponse)
     .then(books => {
       const booksToMap = books.map(item => {
-        item.chapters = arrToMap(item.chapters, "id_chapter", ChapterRecord);
+        item.chapters = arrToMap(item.chapters, "idChapter", ChapterRecord);
         return item;
       });
       return booksToMap;
@@ -26,7 +26,7 @@ function getBook(idBook) {
     .get(`/books/${idBook}`)
     .then(handleResponse)
     .then(book => {
-      const chapters = arrToMap(book.chapters, "id_chapter", ChapterRecord);
+      const chapters = arrToMap(book.chapters, "idChapter", ChapterRecord);
       const chaptersToMap = { ...book, chapters };
 
       return chaptersToMap;
@@ -37,5 +37,5 @@ function getChapterText(idBook, idChapter) {
   return Api()
     .get(`/books/${idBook}/${idChapter}`)
     .then(handleResponse)
-    .then(data => data.chapter_content);
+    .then(data => data.chapterContent);
 }

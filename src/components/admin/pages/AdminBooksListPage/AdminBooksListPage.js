@@ -34,11 +34,11 @@ class AdminBooksListPage extends Component {
         <input type="text" value={searchTerm} onChange={this.handlerOnChange} placeholder="Поиск" />
         <ul className={classes.AdminBooksListPage}>
           {mapToArr(books)
-            .filter(book => `${book.book_name}`.toUpperCase().indexOf(searchTerm.trim().toUpperCase()) >= 0)
+            .filter(book => `${book.bookName}`.toUpperCase().indexOf(searchTerm.trim().toUpperCase()) >= 0)
             .map(book => {
               return (
-                <li key={book.id_book}>
-                  <Link to={`/admin/books/${book.id_book}`}>{book.book_name}</Link>
+                <li key={book.idBook}>
+                  <Link to={`/admin/books/${book.idBook}`}>{book.bookName}</Link>
                 </li>
               );
             })}
