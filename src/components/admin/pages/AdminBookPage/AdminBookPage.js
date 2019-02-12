@@ -5,13 +5,14 @@ import { connect } from "react-redux";
 import { loadBook, loadAllAuthors, uploadBookImg, deleteBookImg } from "../../../../actions";
 import BookEdit from "./BookEdit/BookEdit";
 import Loader from "../../../UI/Loader/Loader";
+import { booksLoadingSelector, authorsLoadingSelector, bookSelector, authorsListSelector } from "../../../../selectors";
 
 class AdminBookPage extends Component {
   componentDidMount() {
-    const { book, loadingBook, loadBook, match, loadingAuthors, authors } = this.props;
-    if (!loadingAuthors && !authors.size) {
+    const { book, booksLoading, loadBook, match, authorsLoading, authors } = this.props;
+    if (!authorsLoading && !authors.size) {
       loadBook(match.params.idBook, true);
-    } else if (!loadingBook && !book) {
+    } else if (!booksLoading && !book) {
       loadBook(match.params.idBook);
     }
   }
@@ -25,7 +26,7 @@ class AdminBookPage extends Component {
   handleDeleteBookImg = () => this.props.deleteBookImg(this.props.match.params.idBook);
 
   render() {
-    const { create, book, loadingBook, authors, loadingAuthors } = this.props;
+    const { create, book, booksLoading, authors, authorsLoading } = this.props;
 
     const editOrCreate = () => {
       if (create) {
@@ -34,8 +35,8 @@ class AdminBookPage extends Component {
             onSubmit={this.handleCreate}
             onUploadImg={this.handleUploadBookImg}
             onDeleteImg={this.handleDeleteBookImg}
-            loadingBook={loadingBook}
-            loadingAuthors={loadingAuthors}
+            booksLoading={booksLoading}
+            authorsLoading={authorsLoading}
           />
         );
       } else if (book) {
@@ -46,14 +47,12 @@ class AdminBookPage extends Component {
             onDeleteImg={this.handleDeleteBookImg}
             book={book}
             authors={authors}
-            loadingBook={loadingBook}
-            loadingAuthors={loadingAuthors}
+            booksLoading={booksLoading}
+            authorsLoading={authorsLoading}
           />
         );
-      } else if (loadingBook || loadingAuthors) {
+      } else if (booksLoading || authorsLoading) {
         return <Loader />;
-      } else {
-        return null;
       }
     };
     return <div className={classes.AdminBookPage}>{editOrCreate()}</div>;
@@ -62,10 +61,10 @@ class AdminBookPage extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    loadingBook: state.books.loading,
-    loadingAuthors: state.authors.loading,
-    book: state.books.entities.get(ownProps.match.params.idBook),
-    authors: state.authors.entities,
+    booksLoading: booksLoadingSelector(state),
+    authorsLoading: authorsLoadingSelector(state),
+    book: bookSelector(state, ownProps),
+    authors: authorsListSelector(state),
   }),
   { loadBook, loadAllAuthors, uploadBookImg, deleteBookImg }
 )(AdminBookPage);

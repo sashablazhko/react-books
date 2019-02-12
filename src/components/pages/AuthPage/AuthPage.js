@@ -9,6 +9,7 @@ import Sign from "../../auth/Sign/Sign";
 // import SignIn from "../../auth/SignIn/SignIn";
 // import SignUp from "../../auth/SignUp/SignUp";
 import { decodeToken, isExpired } from "../../../helpers";
+import { authLoadingSelector, redirectToReferrerSelector, expirationDateSelector } from "../../../selectors";
 
 import bg from "../../../resources/images/bg.jpg";
 import Loader from "../../UI/Loader/Loader";
@@ -68,10 +69,10 @@ class AuthPage extends Component {
 
 export default connect(
   state => ({
-    loading: state.auth.loading,
-    redirectToReferrer: state.auth.redirectToReferrer,
-    expirationDate: state.auth.user.expirationDate,
-    isAuthorized: state.auth.user.expirationDate && parseInt(Date.now() / 1000, 10) < state.auth.user.expirationDate,
+    authLoading: authLoadingSelector(state),
+    redirectToReferrer: redirectToReferrerSelector(state),
+    expirationDate: expirationDateSelector(state),
+    isAuthorized: expirationDateSelector(state) && parseInt(Date.now() / 1000, 10) < expirationDateSelector(state),
   }),
   { signUp, signIn, me, refreshToken },
   null,

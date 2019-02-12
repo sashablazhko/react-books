@@ -29,3 +29,7 @@
 .AuthorEdit .error{
   color: red;
 }
+
+.AuthorEdit button{
+  margin-right: 15px;
+}

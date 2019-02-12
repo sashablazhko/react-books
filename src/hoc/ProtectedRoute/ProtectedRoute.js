@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { isAuthorizedSelector } from "../../selectors";
+import { isAuthorizedSelector, expirationDateSelector } from "../../selectors";
 
 export class ProtectedRoute extends Component {
   render() {
@@ -22,7 +22,7 @@ export class ProtectedRoute extends Component {
 export default connect(
   state => ({
     // isAuthorized: isAuthorizedSelector(state),
-    isAuthorized: state.auth.user.expirationDate && parseInt(Date.now() / 1000, 10) < state.auth.user.expirationDate,
+    isAuthorized: expirationDateSelector(state) && parseInt(Date.now() / 1000, 10) < expirationDateSelector(state),
   }),
   null,
   null,

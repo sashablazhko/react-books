@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { loadAuthor, updateAuthor } from "../../../../actions";
 import AuthorEdit from "./AuthorEdit/AuthorEdit";
 import Loader from "../../../UI/Loader/Loader";
+import { authorsLoadingSelector, authorSelector } from "selectors";
 
 class AdminAuthorPage extends Component {
   componentDidMount() {
@@ -30,8 +31,6 @@ class AdminAuthorPage extends Component {
         return <AuthorEdit onSubmit={this.handleEdit} author={author} loading={loading} />;
       } else if (loading) {
         return <Loader />;
-      } else {
-        return null;
       }
     };
     return <div className={classes.AdminAuthorPage}>{editOrCreate()}</div>;
@@ -40,8 +39,8 @@ class AdminAuthorPage extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    loading: state.authors.loading,
-    author: state.authors.entities.get(ownProps.match.params.idAuthor),
+    authorsLoading: authorsLoadingSelector(state),
+    author: authorSelector(state, ownProps),
   }),
   { loadAuthor, updateAuthor }
 )(AdminAuthorPage);

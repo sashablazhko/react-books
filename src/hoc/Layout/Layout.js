@@ -12,7 +12,7 @@ import Drawer from "../../components/Navigation/Drawer/Drawer";
 import { me, refreshToken } from "../../actions";
 import { decodeToken, isExpired } from "../../helpers";
 import Loader from "../../components/UI/Loader/Loader";
-import { authLoading } from "../../selectors";
+import { authLoadingSelector } from "../../selectors";
 
 export class Layout extends Component {
   constructor(props) {
@@ -49,13 +49,13 @@ export class Layout extends Component {
   };
 
   render() {
-    const { loading } = this.props;
+    const { authLoading } = this.props;
     return (
       <div className={classes.Layout}>
         <Drawer isOpen={this.state.menu} onClose={this.menuCloseHandler} />
         <MenuToggle onToggle={this.toggleMenuHandler} isOpen={this.state.menu} />
         <Header />
-        <main>{loading ? <Loader /> : this.props.children}</main>
+        <main>{authLoading ? <Loader /> : this.props.children}</main>
         <Footer />
         <ToastContainer autoClose={3000} />
       </div>
@@ -66,7 +66,7 @@ export class Layout extends Component {
 export default connect(
   state => ({
     // expirationDate: state.auth.user.expirationDate,
-    loading: authLoading(state),
+    authLoading: authLoadingSelector(state),
   }),
   null,
   null,

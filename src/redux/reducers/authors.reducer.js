@@ -12,7 +12,7 @@ export const AuthorRecord = Record({
 const ReducerState = Record({
   entities: new OrderedMap({}),
   loading: false,
-  listLoaded: false,
+  loadedList: false,
   error: null,
   errorMsg: null,
 });

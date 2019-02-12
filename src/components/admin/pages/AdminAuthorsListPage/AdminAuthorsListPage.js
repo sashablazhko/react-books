@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Loader from "../../../UI/Loader/Loader";
 
 import { loadAllAuthors } from "../../../../actions";
-import { mapToArr } from "../../../../helpers";
+import { authorsListSelector, authorsLoadingSelector, authorsListLoadedSelector } from "selectors";
 
 class AdminAuthorsListPage extends Component {
   state = {
@@ -13,8 +13,8 @@ class AdminAuthorsListPage extends Component {
   };
 
   componentDidMount() {
-    const { loadAllAuthors, loading, listLoaded } = this.props;
-    if (!loading && !listLoaded) {
+    const { loadAllAuthors, authorsLoading, authorsListLoaded } = this.props;
+    if (!authorsLoading && !authorsListLoaded) {
       loadAllAuthors();
     }
   }
@@ -24,16 +24,16 @@ class AdminAuthorsListPage extends Component {
   };
 
   render() {
-    const { loading, authors } = this.props;
+    const { authorsLoading, authors } = this.props;
     const { searchTerm } = this.state;
-    if (loading) return <Loader />;
+    if (authorsLoading) return <Loader />;
     return (
       <div>
         <button>Добавить автора</button>
         <hr />
         <input type="text" value={searchTerm} onChange={this.handlerOnChange} placeholder="Поиск" />
         <ul className={classes.AdminAuthorsListPage}>
-          {mapToArr(authors)
+          {authors
             .filter(author => `${author.authorName}`.toUpperCase().indexOf(searchTerm.trim().toUpperCase()) >= 0)
             .map(author => {
               return (
@@ -50,9 +50,9 @@ class AdminAuthorsListPage extends Component {
 
 export default connect(
   state => ({
-    authors: state.authors.entities,
-    loading: state.authors.loading,
-    listLoaded: state.authors.listLoaded,
+    authors: authorsListSelector(state),
+    authorsLoading: authorsLoadingSelector(state),
+    authorsListLoaded: authorsListLoadedSelector(state),
   }),
   { loadAllAuthors }
 )(AdminAuthorsListPage);

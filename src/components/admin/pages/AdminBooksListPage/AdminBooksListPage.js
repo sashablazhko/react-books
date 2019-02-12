@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Loader from "../../../UI/Loader/Loader";
 
 import { loadAllBooks } from "../../../../actions";
-import { mapToArr } from "../../../../helpers";
+import { booksListSelector, booksLoadingSelector } from "selectors";
 
 class AdminBooksListPage extends Component {
   state = {
@@ -14,7 +14,8 @@ class AdminBooksListPage extends Component {
 
   componentDidMount() {
     const { loadAllBooks, books } = this.props;
-    if (books.size <= 1) {
+    console.log("books", books);
+    if (books.length <= 1) {
       loadAllBooks();
     }
   }
@@ -24,16 +25,16 @@ class AdminBooksListPage extends Component {
   };
 
   render() {
-    const { loading, books } = this.props;
+    const { booksLoading, books } = this.props;
     const { searchTerm } = this.state;
-    if (loading) return <Loader />;
+    if (booksLoading) return <Loader />;
     return (
       <div>
         <button>Добавить книгу</button>
         <hr />
         <input type="text" value={searchTerm} onChange={this.handlerOnChange} placeholder="Поиск" />
         <ul className={classes.AdminBooksListPage}>
-          {mapToArr(books)
+          {books
             .filter(book => `${book.bookName}`.toUpperCase().indexOf(searchTerm.trim().toUpperCase()) >= 0)
             .map(book => {
               return (
@@ -50,8 +51,8 @@ class AdminBooksListPage extends Component {
 
 export default connect(
   state => ({
-    books: state.books.entities,
-    loading: state.books.loading,
+    books: booksListSelector(state),
+    booksLoading: booksLoadingSelector(state),
   }),
   { loadAllBooks }
 )(AdminBooksListPage);

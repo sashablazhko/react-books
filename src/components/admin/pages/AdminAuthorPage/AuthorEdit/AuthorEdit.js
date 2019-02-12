@@ -27,7 +27,7 @@ class AuthorEdit extends Component {
             <form onSubmit={handleSubmit}>
               <Field name="authorName" placeholder="Автор">
                 {({ input, meta, placeholder }) => (
-                  <div>
+                  <div className="row">
                     <label>Автор (ФИ)</label>
                     <input {...input} placeholder={placeholder} />
                   </div>

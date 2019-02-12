@@ -29,3 +29,7 @@
 .BookEdit .error{
   color: red;
 }
+
+.BookEdit button{
+  margin-right: 15px;
+}

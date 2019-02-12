@@ -6,21 +6,22 @@ import bg from "../../../resources/images/bg.jpg";
 import { loadBook } from "../../../actions";
 import Loader from "../../UI/Loader/Loader";
 import ChaptersList from "./ChaptersList/ChaptersList";
+import { bookSelector, booksLoadingSelector, authorsMapSelector } from "selectors";
 
 class BookPage extends Component {
   componentDidMount() {
-    const { book, loading, loadBook, match } = this.props;
-    if (!loading && !book) {
-      loadBook(match.params.idBook);
+    const { book, booksLoading, loadBook, match } = this.props;
+    if (!booksLoading && !book) {
+      loadBook(match.params.idBook, true);
     }
   }
 
   render() {
-    const { loading, book } = this.props;
-    if (loading || !book) return <Loader />;
+    const { booksLoading, book } = this.props;
+    if (booksLoading || !book) return <Loader />;
+    console.log("book", book.toJS());
     const {
-      chapters,
-      book: { bookName, authorName, bookDescription },
+      book: { bookName, bookDescription, chapters, authorName },
     } = this.props;
     return (
       <div className={classes.BookPage} style={{ background: `url(${bg})` }}>
@@ -39,13 +40,8 @@ class BookPage extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    book:
-      state.books.entities.get(ownProps.match.params.idBook) &&
-      state.books.entities.get(ownProps.match.params.idBook).toJS(),
-    chapters:
-      state.books.entities.get(ownProps.match.params.idBook) &&
-      state.books.entities.get(ownProps.match.params.idBook).chapters,
-    loading: state.books.loading,
+    book: bookSelector(state, ownProps),
+    booksLoading: booksLoadingSelector(state),
   }),
   { loadBook }
 )(BookPage);

@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 
 import { apiHost } from "../../../../../config";
 import Loader from "../../../../UI/Loader/Loader";
-import { mapToArr } from "../../../../../helpers";
 
 class BookEdit extends Component {
   constructor(props) {
@@ -37,7 +36,7 @@ class BookEdit extends Component {
   }
 
   render() {
-    const { book, onSubmit, loadingBook, authors, loadingAuthors, onDeleteImg } = this.props;
+    const { book, onSubmit, booksLoading, authors, authorsLoading, onDeleteImg } = this.props;
     const initData = {
       bookName: book.bookName,
       authorId: book.authorId,
@@ -65,7 +64,7 @@ class BookEdit extends Component {
                     <div className="row">
                       <label>{placeholder}</label>
                       <select value={input.value} {...input}>
-                        {mapToArr(authors).map(author => {
+                        {authors.map(author => {
                           return (
                             <option value={author.idAuthor} key={author.idAuthor}>
                               {author.authorName}
@@ -119,7 +118,7 @@ class BookEdit extends Component {
               <button type="button" onClick={this.handleCancel} disabled={submitting || pristine}>
                 Отменить
               </button>
-              {loadingBook && <Loader />}
+              {(booksLoading || authorsLoading) && <Loader />}
             </form>
           )}
         </Form>

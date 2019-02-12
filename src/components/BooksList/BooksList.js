@@ -5,22 +5,26 @@ import BookCard from "./BookCard/BookCard";
 import Loader from "../UI/Loader/Loader";
 
 import { loadAllBooks } from "../../actions";
-import { mapToArr } from "../../helpers";
+import { booksListSelector, booksLoadingSelector, authorsLoadingSelector, authorsMapSelector } from "selectors";
 
 class BooksList extends Component {
   componentDidMount() {
     const { loadAllBooks, books } = this.props;
-    if (books.size < 3) {
+    if (books.length <= 3) {
       loadAllBooks();
     }
   }
 
   render() {
-    const { loadingBooks, loadingAuthors, books, authors } = this.props;
-    if (loadingBooks || loadingAuthors) return <Loader />;
+    const { booksLoading, authorsLoading, books, authors } = this.props;
+    console.log("books.length", books.length);
+
+    console.log("authors.length", authors);
+    // debugger;
+    if (booksLoading || authorsLoading || !books.length || Object.keys(authors).length === 0) return <Loader />;
     return (
       <div className={classes.BooksList}>
-        {mapToArr(books).map(book => {
+        {books.map(book => {
           return <BookCard key={book.idBook} book={book} author={authors[book.authorId]} />;
         })}
       </div>
@@ -29,13 +33,11 @@ class BooksList extends Component {
 }
 
 export default connect(
-  state => {
-    return {
-      books: state.books.entities,
-      authors: state.authors.entities && state.authors.entities.toJS(),
-      loadingBooks: state.books.loading,
-      loadingAuthors: state.authors.loading,
-    };
-  },
+  state => ({
+    books: booksListSelector(state),
+    authors: authorsMapSelector(state) && authorsMapSelector(state).toJS(),
+    booksLoading: booksLoadingSelector(state),
+    authorsLoading: authorsLoadingSelector(state),
+  }),
   { loadAllBooks }
 )(BooksList);

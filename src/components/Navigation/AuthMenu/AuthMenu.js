@@ -3,7 +3,7 @@ import classes from "./AuthMenu.module.css";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { signOut } from "../../../actions";
-import { isAuthorizedSelector } from "../../../selectors";
+import { expirationDateSelector } from "../../../selectors";
 
 const AuthMenu = ({ isAuthorized, email, signOut }) => {
   return (
@@ -32,7 +32,7 @@ const AuthMenu = ({ isAuthorized, email, signOut }) => {
 export default connect(
   state => {
     return {
-      isAuthorized: isAuthorizedSelector(state),
+      isAuthorized: expirationDateSelector(state) && parseInt(Date.now() / 1000, 10) < expirationDateSelector(state),
       email: state.auth.user.email,
     };
   },

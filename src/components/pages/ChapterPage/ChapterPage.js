@@ -4,20 +4,21 @@ import { connect } from "react-redux";
 
 import { loadChapterText } from "../../../actions";
 import Loader from "../../UI/Loader/Loader";
+import { booksLoadingSelector, chapterSelector } from "selectors";
 
 class Chapter extends Component {
   componentDidMount() {
-    const { chapter, loading, loadChapterText, match } = this.props;
+    const { chapter, booksLoading, loadChapterText, match } = this.props;
     const loadBookInfo = !chapter;
     const loadChaptertext = !chapter || (!!chapter && !chapter.chapterContent);
-    if (!loading && loadChaptertext) {
-      loadChapterText(match.params.idBook, match.params.idChapter, loadBookInfo);
+    if (!booksLoading && loadChaptertext) {
+      loadChapterText(+match.params.idBook, +match.params.idChapter, loadBookInfo);
     }
   }
 
   render() {
-    const { loading, chapter } = this.props;
-    if (loading || !chapter) return <Loader />;
+    const { booksLoading, chapter } = this.props;
+    if (booksLoading || !chapter) return <Loader />;
     const {
       chapter: { chapterName, chapterContent },
     } = this.props;
@@ -34,10 +35,8 @@ class Chapter extends Component {
 
 export default connect(
   (state, ownProps) => ({
-    chapter:
-      state.books.getIn(["entities", ownProps.match.params.idBook, "chapters", ownProps.match.params.idChapter]) &&
-      state.books.getIn(["entities", ownProps.match.params.idBook, "chapters", ownProps.match.params.idChapter]).toJS(),
-    loading: state.books.loading,
+    chapter: chapterSelector(state, ownProps),
+    booksLoading: booksLoadingSelector(state),
   }),
   { loadChapterText }
 )(Chapter);
