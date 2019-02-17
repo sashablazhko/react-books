@@ -36,7 +36,7 @@ class BookEdit extends Component {
   }
 
   render() {
-    const { book, onSubmit, booksLoading, authors, authorsLoading, onDeleteImg } = this.props;
+    const { book, onSubmit, booksLoading, authors, authorsLoading } = this.props;
     const initData = {
       bookName: book.bookName,
       authorId: book.authorId,

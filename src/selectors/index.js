@@ -30,7 +30,7 @@ export const authorsListSelector = createSelector(
 
 export const authorsLoadingSelector = state => state.authors.loading;
 
-export const authorsListLoadedSelector = state => state.authors.loadedList;
+export const authorsListLoadedSelector = state => state.authors.listLoaded;
 
 export const authorSelector = createSelector(
   authorsMapSelector,

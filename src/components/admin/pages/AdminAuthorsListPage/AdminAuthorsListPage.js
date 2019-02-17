@@ -29,7 +29,9 @@ class AdminAuthorsListPage extends Component {
     if (authorsLoading) return <Loader />;
     return (
       <div>
-        <button>Добавить автора</button>
+        <Link to="/admin/authors/new">
+          <button>Добавить автора</button>
+        </Link>
         <hr />
         <input type="text" value={searchTerm} onChange={this.handlerOnChange} placeholder="Поиск" />
         <ul className={classes.AdminAuthorsListPage}>

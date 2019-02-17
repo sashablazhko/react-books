@@ -12,7 +12,7 @@ export const AuthorRecord = Record({
 const ReducerState = Record({
   entities: new OrderedMap({}),
   loading: false,
-  loadedList: false,
+  listLoaded: false,
   error: null,
   errorMsg: null,
 });
@@ -24,6 +24,7 @@ export function authors(state = new ReducerState(), action) {
     case authorsConstants.LOAD_ALL_AUTHORS_REQUEST:
     case authorsConstants.LOAD_AUTHOR_REQUEST:
     case adminConstants.UPDATE_AUTHOR_REQUEST:
+    case adminConstants.ADD_AUTHOR_REQUEST:
       return state.set("loading", true);
 
     case authorsConstants.LOAD_ALL_AUTHORS_SUCCESS:
@@ -35,6 +36,7 @@ export function authors(state = new ReducerState(), action) {
 
     case authorsConstants.LOAD_AUTHOR_SUCCESS:
     case adminConstants.UPDATE_AUTHOR_SUCCESS:
+    case adminConstants.ADD_AUTHOR_SUCCESS:
       return state
         .set("loading", false)
         .set("error", null)
@@ -43,6 +45,7 @@ export function authors(state = new ReducerState(), action) {
     case authorsConstants.LOAD_ALL_AUTHORS_FAILURE:
     case authorsConstants.LOAD_AUTHOR_FAILURE:
     case adminConstants.UPDATE_AUTHOR_FAILURE:
+    case adminConstants.ADD_AUTHOR_FAILURE:
       return state
         .set("loading", false)
         .set("error", true)
