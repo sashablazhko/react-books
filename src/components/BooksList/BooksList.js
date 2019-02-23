@@ -17,10 +17,6 @@ class BooksList extends Component {
 
   render() {
     const { booksLoading, authorsLoading, books, authors } = this.props;
-    console.log("books.length", books.length);
-
-    console.log("authors.length", authors);
-    // debugger;
     if (booksLoading || authorsLoading || !books.length || Object.keys(authors).length === 0) return <Loader />;
     return (
       <div className={classes.BooksList}>

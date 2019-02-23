@@ -14,7 +14,6 @@ class AdminBooksListPage extends Component {
 
   componentDidMount() {
     const { loadAllBooks, books } = this.props;
-    console.log("books", books);
     if (books.length <= 1) {
       loadAllBooks();
     }
@@ -30,7 +29,9 @@ class AdminBooksListPage extends Component {
     if (booksLoading) return <Loader />;
     return (
       <div>
-        <button>Добавить книгу</button>
+        <Link to="/admin/books/new">
+          <button>Добавить книгу</button>
+        </Link>
         <hr />
         <input type="text" value={searchTerm} onChange={this.handlerOnChange} placeholder="Поиск" />
         <ul className={classes.AdminBooksListPage}>

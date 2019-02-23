@@ -35,7 +35,6 @@ export function loadAuthor(id) {
 
     authorsService.getAuthor(id).then(
       author => {
-        console.log("author", author);
         dispatch(_success(author));
       },
       err => {

@@ -1,0 +1,35 @@
+.ChapterEditj{
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.ChapterEdit label{
+  display: block;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+}
+
+.ChapterEdit input{
+  width: 100%;
+  margin: 0; padding: 0;
+  display: block;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.ChapterEdit textarea{
+  width: 100%;
+  height: calc(100vw - 400px);
+  margin: 0; padding: 0;
+  display: block;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.ChapterEdit .error{
+  color: red;
+}
+
+.ChapterEdit button{
+  margin-right: 15px;
+}

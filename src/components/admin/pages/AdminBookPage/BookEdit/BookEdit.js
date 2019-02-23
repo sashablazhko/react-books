@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import { apiHost } from "../../../../../config";
 import Loader from "../../../../UI/Loader/Loader";
+import ChaptersList from "components/pages/BookPage/ChaptersList/ChaptersList";
 
 class BookEdit extends Component {
   constructor(props) {
@@ -37,12 +38,22 @@ class BookEdit extends Component {
 
   render() {
     const { book, onSubmit, booksLoading, authors, authorsLoading } = this.props;
-    const initData = {
-      bookName: book.bookName,
-      authorId: book.authorId,
-      bookImg: book.bookImg,
-      bookDescription: book.bookDescription,
+    let initData = {
+      bookName: "",
+      authorId: "",
+      bookImg: "",
+      bookDescription: "",
     };
+    let imgSrc = `${apiHost}/uploads/noimage.jpg`;
+    if (book) {
+      initData = {
+        bookName: book.bookName,
+        authorId: book.authorId,
+        bookImg: book.bookImg,
+        bookDescription: book.bookDescription,
+      };
+      imgSrc = `${apiHost}/uploads/${book.bookImg}`;
+    }
     return (
       <div className={classes.BookEdit}>
         <h2>{!book ? "Новая книга" : "Редактировать книгу"}</h2>
@@ -80,15 +91,10 @@ class BookEdit extends Component {
 
               <div className="row">
                 <label>Обложка</label>
-                <img src={`${apiHost}/uploads/${book.bookImg}`} alt={book.bookName} />
-                <p>{`${apiHost}/uploads/${book.bookImg}`}</p>
+                <img src={imgSrc} alt={book ? book.bookName : "no image"} />
+                <p>{imgSrc}</p>
 
-                <input
-                  type="text"
-                  name="bookImgString"
-                  value={`${apiHost}/uploads/${book.bookImg}`}
-                  onChange={() => {}}
-                />
+                <input type="text" name="bookImgString" value={imgSrc} onChange={() => {}} />
                 <Field name="bookImg" placeholder="Изображение">
                   {({ input, meta, placeholder }) => (
                     <div className="row">
@@ -122,8 +128,9 @@ class BookEdit extends Component {
             </form>
           )}
         </Form>
-        {/* <pre style={{ width: "1000px", overflow: "hidden" }}>{JSON.stringify(authors, null, 4)}</pre> */}
-        <pre style={{ width: "1000px", overflow: "hidden" }}>{JSON.stringify(book, null, 4)}</pre>
+        {book && <ChaptersList chapters={book.chapters} />}
+        {/* <pre style={{ width: "1000px", overflow: "hidden" }}>{JSON.stringify(authors, null, 4)}</pre> 
+        <pre style={{ width: "1000px", overflow: "hidden" }}>{JSON.stringify(book, null, 4)}</pre>*/}
       </div>
     );
   }

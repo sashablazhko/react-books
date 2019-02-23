@@ -19,7 +19,6 @@ class BookPage extends Component {
   render() {
     const { booksLoading, book } = this.props;
     if (booksLoading || !book) return <Loader />;
-    console.log("book", book.toJS());
     const {
       book: { bookName, bookDescription, chapters, authorName },
     } = this.props;
