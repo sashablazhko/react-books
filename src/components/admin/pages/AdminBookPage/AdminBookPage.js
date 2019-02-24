@@ -9,15 +9,19 @@ import { booksLoadingSelector, authorsLoadingSelector, bookSelector, authorsList
 
 class AdminBookPage extends Component {
   componentDidMount() {
-    const { book, booksLoading, loadBook, match, authorsLoading, authors } = this.props;
-    if (!authorsLoading && !authors.size && !!match.params.idAuthor) {
+    const { book, booksLoading, loadBook, match, authorsLoading, authors, loadAllAuthors } = this.props;
+    if (!authorsLoading && !authors.length && !!match.params.idAuthor) {
       loadBook(match.params.idBook, true);
     } else if (!booksLoading && !book && !!match.params.idAuthor) {
       loadBook(match.params.idBook);
+    } else if (!authorsLoading && !authors.length) {
+      loadAllAuthors();
     }
   }
 
-  handleCreate = () => {};
+  handleCreate = args => {
+    console.log("args", args);
+  };
   handleEdit = book => {
     this.props.updateBook(this.props.match.params.idBook, book);
   };
@@ -27,13 +31,15 @@ class AdminBookPage extends Component {
 
   editOrCreate = () => {
     const { create, book, booksLoading, authors, authorsLoading } = this.props;
-    if (create) {
+    if (booksLoading || authorsLoading || !authors.length) {
+      return <Loader />;
+    } else if (create) {
       return (
         <BookEdit
-          authors={authors}
           onSubmit={this.handleCreate}
           onUploadImg={this.handleUploadBookImg}
           onDeleteImg={this.handleDeleteBookImg}
+          authors={authors}
           booksLoading={booksLoading}
           authorsLoading={authorsLoading}
         />
@@ -50,8 +56,6 @@ class AdminBookPage extends Component {
           authorsLoading={authorsLoading}
         />
       );
-    } else if (booksLoading || authorsLoading) {
-      return <Loader />;
     }
   };
 

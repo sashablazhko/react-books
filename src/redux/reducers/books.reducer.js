@@ -38,6 +38,7 @@ export function books(state = new ReducerState(), action) {
     case booksConstants.LOAD_BOOK_REQUEST:
     case booksConstants.LOAD_CHAPTER_TEXT_REQUEST:
     case adminConstants.UPDATE_BOOK_REQUEST:
+    case adminConstants.UPDATE_CHAPTER_REQUEST:
       return state.set("loading", true);
 
     case booksConstants.LOAD_ALL_BOOKS_SUCCESS:
@@ -59,6 +60,13 @@ export function books(state = new ReducerState(), action) {
         .set("error", null)
         .setIn(["entities", action.idBook, "chapters", action.idChapter, "chapterContent"], action.chapterContent);
 
+    case adminConstants.UPDATE_CHAPTER_SUCCESS:
+      return state
+        .set("loading", false)
+        .set("error", null)
+        .setIn(["entities", action.idBook, "chapters", action.idChapter, "chapterName"], action.chapterName)
+        .setIn(["entities", action.idBook, "chapters", action.idChapter, "chapterContent"], action.chapterContent);
+
     case adminConstants.UPLOAD_bookImg_SUCCESS:
     case adminConstants.DELETE_bookImg_SUCCESS:
       return state.setIn(["entities", action.idBook, "bookImg"], action.imgName);
@@ -67,6 +75,7 @@ export function books(state = new ReducerState(), action) {
     case booksConstants.LOAD_BOOK_FAILURE:
     case booksConstants.LOAD_CHAPTER_TEXT_FAILURE:
     case adminConstants.UPDATE_BOOK_FAILURE:
+    case adminConstants.UPDATE_CHAPTER_FAILURE:
       return state
         .set("loading", false)
         .set("error", true)

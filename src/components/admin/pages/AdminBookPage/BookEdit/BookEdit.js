@@ -40,7 +40,7 @@ class BookEdit extends Component {
     const { book, onSubmit, booksLoading, authors, authorsLoading } = this.props;
     let initData = {
       bookName: "",
-      authorId: "",
+      authorId: authors[0].idAuthor,
       bookImg: "",
       bookDescription: "",
     };
@@ -74,7 +74,7 @@ class BookEdit extends Component {
                   return (
                     <div className="row">
                       <label>{placeholder}</label>
-                      <select value={input.value} {...input}>
+                      <select {...input}>
                         {authors.map(author => {
                           return (
                             <option value={author.idAuthor} key={author.idAuthor}>

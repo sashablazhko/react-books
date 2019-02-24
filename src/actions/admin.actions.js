@@ -64,16 +64,16 @@ export function updateAuthor(id, authorName) {
 export function uploadBookImg(file, idBook) {
   return dispatch => {
     dispatch(_request());
-
-    adminService.uploadBookImg(file, idBook).then(
-      imgName => {
-        dispatch(_success(imgName, idBook));
-      },
-      err => {
-        dispatch(_failure(err));
-        toast.error(err);
-      }
-    );
+    console.log("idBook", idBook);
+    // adminService.uploadBookImg(file, idBook).then(
+    //   imgName => {
+    //     dispatch(_success(imgName, idBook));
+    //   },
+    //   err => {uu
+    //     dispatch(_failure(err));
+    //     toast.error(err);
+    //   }
+    // );
   };
 
   function _success(imgName, idBook) {
@@ -146,25 +146,30 @@ export function updateBook(id, book) {
   }
 }
 
-export function updateChapter(idBook, idChapter, chapter) {
+export function updateChapter(idChapter, chapter) {
   return dispatch => {
     dispatch(_request());
 
-    console.log("idBook, idChapter, chapter", idBook, idChapter, chapter);
-    // adminService.updateBook(id, book).then(
-    //   book => {
-    //     dispatch(_success(book));
-    //     dispatch(push("/admin/books"));
-    //   },
-    //   err => {
-    //     dispatch(_failure(err));
-    //     toast.error(err);
-    //   }
-    // );
+    adminService.updateChapter(idChapter, chapter).then(
+      chapter => {
+        dispatch(_success(chapter));
+        dispatch(push(`/admin/books/${chapter.bookId}`));
+      },
+      err => {
+        dispatch(_failure(err));
+        toast.error(err);
+      }
+    );
   };
 
-  function _success(book) {
-    return { type: adminConstants.UPDATE_CHAPTER_SUCCESS, book };
+  function _success(chapter) {
+    return {
+      type: adminConstants.UPDATE_CHAPTER_SUCCESS,
+      idBook: +chapter.bookId,
+      idChapter: +idChapter,
+      chapterName: chapter.chapterName,
+      chapterContent: chapter.chapterContent,
+    };
   }
   function _request() {
     return { type: adminConstants.UPDATE_CHAPTER_REQUEST };

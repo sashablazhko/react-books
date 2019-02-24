@@ -25,12 +25,12 @@ class AdminAuthorPage extends Component {
 
   editOrCreate = () => {
     const { create, author, loading } = this.props;
-    if (create) {
+    if (loading) {
+      return <Loader />;
+    } else if (create) {
       return <AuthorEdit onSubmit={this.handleCreate} loading={loading} />;
     } else if (author) {
       return <AuthorEdit onSubmit={this.handleEdit} author={author} loading={loading} />;
-    } else if (loading) {
-      return <Loader />;
     }
   };
 

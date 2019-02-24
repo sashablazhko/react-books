@@ -3,7 +3,7 @@ import classes from "./AdminChapterPage.module.css";
 import { connect } from "react-redux";
 
 import ChapterEdit from "./ChapterEdit/ChapterEdit";
-import { loadChapterText } from "../../../../actions";
+import { loadChapterText, updateChapter } from "../../../../actions";
 import Loader from "../../../UI/Loader/Loader";
 import { booksLoadingSelector, chapterSelector } from "selectors";
 
@@ -19,18 +19,18 @@ class AdminChapterPage extends Component {
 
   handleCreate = () => {};
   handleEdit = chapter => {
-    this.props.updateChapter(this.props.match.params.idBook, this.props.match.params.idChapter, chapter);
+    this.props.updateChapter(this.props.match.params.idChapter, chapter);
   };
   handleDelete = () => {};
 
   editOrCreate = () => {
     const { create, booksLoading, chapter } = this.props;
-    if (create) {
+    if (booksLoading || !chapter) {
+      return <Loader />;
+    } else if (create) {
       return <ChapterEdit onSubmit={this.handleCreate} booksLoading={booksLoading} />;
     } else if (chapter) {
       return <ChapterEdit onSubmit={this.handleEdit} chapter={chapter} booksLoading={booksLoading} />;
-    } else if (booksLoading || !chapter) {
-      return <Loader />;
     }
   };
 
@@ -44,5 +44,5 @@ export default connect(
     chapter: chapterSelector(state, ownProps),
     booksLoading: booksLoadingSelector(state),
   }),
-  { loadChapterText }
+  { loadChapterText, updateChapter }
 )(AdminChapterPage);
