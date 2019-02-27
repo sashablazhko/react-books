@@ -27,7 +27,7 @@ class BookEdit extends Component {
 
   handleDeleteImg(e) {
     e.preventDefault();
-    if (this.props.book.bookImg !== "noimage.jpg") {
+    if ((this.props.book && this.props.book.bookImg !== "noimage.jpg") || this.props.newBookImg !== "noimage.jpg") {
       this.props.onDeleteImg();
     }
   }
@@ -37,14 +37,14 @@ class BookEdit extends Component {
   }
 
   render() {
-    const { book, onSubmit, booksLoading, authors, authorsLoading } = this.props;
+    const { book, onSubmit, booksLoading, authors, authorsLoading, newBookImg } = this.props;
     let initData = {
-      bookName: "",
+      bookName: "test",
       authorId: authors[0].idAuthor,
-      bookImg: "",
+      bookImg: newBookImg,
       bookDescription: "",
     };
-    let imgSrc = `${apiHost}/uploads/noimage.jpg`;
+    let imgSrc = `${apiHost}/uploads/${newBookImg}`;
     if (book) {
       initData = {
         bookName: book.bookName,

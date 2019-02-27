@@ -64,16 +64,16 @@ export function updateAuthor(id, authorName) {
 export function uploadBookImg(file, idBook) {
   return dispatch => {
     dispatch(_request());
-    console.log("idBook", idBook);
-    // adminService.uploadBookImg(file, idBook).then(
-    //   imgName => {
-    //     dispatch(_success(imgName, idBook));
-    //   },
-    //   err => {uu
-    //     dispatch(_failure(err));
-    //     toast.error(err);
-    //   }
-    // );
+
+    adminService.uploadBookImg(file, idBook).then(
+      imgName => {
+        dispatch(_success(imgName, idBook));
+      },
+      err => {
+        dispatch(_failure(err));
+        toast.error(err);
+      }
+    );
   };
 
   function _success(imgName, idBook) {
@@ -115,6 +115,17 @@ export function deleteBookImg(idBook) {
     toast.error(errMsg);
     return { type: adminConstants.DELETE_BOOKIMG_FAILURE, errMsg };
   }
+}
+
+export function uploadImgWithoutBook(file) {
+  return adminService.uploadImgWithoutBook(file).then(
+    imgName => {
+      return imgName;
+    },
+    err => {
+      toast.error(err);
+    }
+  );
 }
 
 export function updateBook(id, book) {

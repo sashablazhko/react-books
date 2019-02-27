@@ -67,9 +67,10 @@ export function books(state = new ReducerState(), action) {
         .setIn(["entities", action.idBook, "chapters", action.idChapter, "chapterName"], action.chapterName)
         .setIn(["entities", action.idBook, "chapters", action.idChapter, "chapterContent"], action.chapterContent);
 
-    case adminConstants.UPLOAD_bookImg_SUCCESS:
-    case adminConstants.DELETE_bookImg_SUCCESS:
+    case adminConstants.UPLOAD_BOOKIMG_SUCCESS:
+    case adminConstants.DELETE_BOOKIMG_SUCCESS:
       return state.setIn(["entities", action.idBook, "bookImg"], action.imgName);
+    // return state.updateIn(["entities", action.idBook], item => item.set("bookImg", action.imgName));
 
     case booksConstants.LOAD_ALL_BOOKS_FAILURE:
     case booksConstants.LOAD_BOOK_FAILURE:

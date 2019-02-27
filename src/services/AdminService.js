@@ -10,6 +10,7 @@ export const adminService = {
   deleteAuthor,
   uploadBookImg,
   deleteBookImg,
+  uploadImgWithoutBook,
   updateBook,
   updateChapter,
 };
@@ -54,6 +55,18 @@ function uploadBookImg(file, id) {
 function deleteBookImg(idBook) {
   return Api()
     .delete(`/admin/deletebookimg/${idBook}`)
+    .then(handleResponse);
+}
+
+function uploadImgWithoutBook(file) {
+  // const token = cookies.get("ACCESS_TOKEN");
+  // axiosClear().defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  const data = new FormData();
+  data.append("file", file, file.name);
+  let settings = { headers: { "content-type": "multipart/form-data" }, mode: "no-cors" };
+
+  return axiosClear()
+    .post("/admin/uploadimgwithoutbook", data, settings)
     .then(handleResponse);
 }
 
