@@ -9,15 +9,11 @@ import Loader from "../../../UI/Loader/Loader";
 import { booksLoadingSelector, authorsLoadingSelector, bookSelector, authorsListSelector } from "../../../../selectors";
 
 class AdminBookPage extends Component {
-  state = {
-    newBookImg: "noimage.jpg",
-  };
-
   componentDidMount() {
-    const { book, booksLoading, loadBook, match, authorsLoading, authors, loadAllAuthors } = this.props;
-    if (!authorsLoading && !authors.length && match.params.idAuthor !== "new") {
+    const { book, booksLoading, loadBook, match, authorsLoading, authors, loadAllAuthors, create } = this.props;
+    if (!authorsLoading && !authors.length && match.params.idAuthor !== "new" && !create) {
       loadBook(match.params.idBook, true);
-    } else if (!booksLoading && !book && match.params.idAuthor !== "new") {
+    } else if (!booksLoading && !book && match.params.idAuthor !== "new" && !create) {
       loadBook(match.params.idBook);
     } else if (!authorsLoading && !authors.length) {
       loadAllAuthors();
@@ -28,7 +24,8 @@ class AdminBookPage extends Component {
     console.log("args", args);
   };
   handleEdit = book => {
-    this.props.updateBook(this.props.match.params.idBook, book);
+    // this.props.updateBook(this.props.match.params.idBook, book);
+    console.log("book", book);
   };
   handleDelete = () => {};
   handleUploadBookImg = file => this.props.uploadBookImg(file, +this.props.match.params.idBook);
@@ -47,7 +44,6 @@ class AdminBookPage extends Component {
           onSubmit={this.handleCreate}
           onUploadImg={this.handleUploadImgWithoutBook}
           onDeleteImg={this.handleDeleteImgWithoutBook}
-          newBookImg={this.state.newBookImg}
           authors={authors}
           booksLoading={booksLoading}
           authorsLoading={authorsLoading}

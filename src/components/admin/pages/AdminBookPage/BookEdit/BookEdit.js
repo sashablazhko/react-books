@@ -10,11 +10,55 @@ import ChaptersList from "components/pages/BookPage/ChaptersList/ChaptersList";
 class BookEdit extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      initData: {
+        bookName: "",
+        authorId: null,
+        bookImg: "noimage.jpg",
+        bookDescription: "",
+      },
+    };
     this.formRef = React.createRef();
     this.bookImgRef = React.createRef();
     this.handleUploadImg = this.handleUploadImg.bind(this);
     this.handleDeleteImg = this.handleDeleteImg.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    console.log("props", props);
+    console.log("state", state);
+    if (props.book && props.book.bookImg !== state.initData.bookImg) {
+    }
+    return {
+      initData: {
+        bookName: props.book.bookName,
+        authorId: props.book.authorId,
+        bookImg: props.book.bookImg,
+        bookDescription: props.book.bookDescription,
+      },
+    };
+  }
+
+  componentDidMount() {
+    const { book } = this.props;
+    if (book) {
+      this.setState({
+        initData: {
+          bookName: book.bookName,
+          authorId: book.authorId,
+          bookImg: book.bookImg,
+          bookDescription: book.bookDescription,
+        },
+      });
+    } else {
+      this.setState({
+        initData: {
+          ...this.state.initData,
+          authorId: this.props.authors[0].idAuthor,
+        },
+      });
+    }
   }
 
   handleUploadImg(e) {
@@ -27,7 +71,10 @@ class BookEdit extends Component {
 
   handleDeleteImg(e) {
     e.preventDefault();
-    if ((this.props.book && this.props.book.bookImg !== "noimage.jpg") || this.props.newBookImg !== "noimage.jpg") {
+    if (
+      (this.props.book && this.props.book.bookImg !== "noimage.jpg") ||
+      this.state.initData.bookImg !== "noimage.jpg"
+    ) {
       this.props.onDeleteImg();
     }
   }
@@ -37,27 +84,11 @@ class BookEdit extends Component {
   }
 
   render() {
-    const { book, onSubmit, booksLoading, authors, authorsLoading, newBookImg } = this.props;
-    let initData = {
-      bookName: "test",
-      authorId: authors[0].idAuthor,
-      bookImg: newBookImg,
-      bookDescription: "",
-    };
-    let imgSrc = `${apiHost}/uploads/${newBookImg}`;
-    if (book) {
-      initData = {
-        bookName: book.bookName,
-        authorId: book.authorId,
-        bookImg: book.bookImg,
-        bookDescription: book.bookDescription,
-      };
-      imgSrc = `${apiHost}/uploads/${book.bookImg}`;
-    }
+    const { book, onSubmit, booksLoading, authors, authorsLoading } = this.props;
     return (
       <div className={classes.BookEdit}>
         <h2>{!book ? "Новая книга" : "Редактировать книгу"}</h2>
-        <Form initialValues={initData} onSubmit={onSubmit} ref={this.formRef}>
+        <Form initialValues={this.state.initData} onSubmit={onSubmit} ref={this.formRef}>
           {({ handleSubmit, values, submitting, pristine }) => (
             <form onSubmit={handleSubmit}>
               <Field name="bookName" placeholder="Название книги">
@@ -91,10 +122,18 @@ class BookEdit extends Component {
 
               <div className="row">
                 <label>Обложка</label>
-                <img src={imgSrc} alt={book ? book.bookName : "no image"} />
-                <p>{imgSrc}</p>
+                <img
+                  src={`${apiHost}/uploads/${this.state.initData.bookImg}`}
+                  alt={book ? book.bookName : "no image"}
+                />
+                <p>{`${apiHost}/uploads/${this.state.initData.bookImg}`}</p>
 
-                <input type="text" name="bookImgString" value={imgSrc} onChange={() => {}} />
+                <input
+                  type="text"
+                  name="bookImgString"
+                  value={`${apiHost}/uploads/${this.state.initData.bookImg}`}
+                  onChange={() => {}}
+                />
                 <Field name="bookImg" placeholder="Изображение">
                   {({ input, meta, placeholder }) => (
                     <div className="row">
