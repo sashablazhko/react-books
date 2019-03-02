@@ -27,7 +27,7 @@ class AuthPage extends Component {
       const tokenData = decodeToken(accessToken);
       if (!isExpired(tokenData.expirationDate) && !expirationDate) {
         me(accessToken);
-      } else if (isExpired(tokenData.expirationDate) && !!expirationDate) {
+      } else if (isExpired(tokenData.expirationDate) && !expirationDate) {
         refreshToken(accessToken);
       }
     }

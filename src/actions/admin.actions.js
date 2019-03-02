@@ -128,6 +128,35 @@ export function uploadImgWithoutBook(file) {
   );
 }
 
+export function addBook(book) {
+  return dispatch => {
+    dispatch(_request());
+
+    adminService.addBook(book).then(
+      book => {
+        dispatch(_success(book));
+        dispatch(push("/admin/books"));
+      },
+      err => {
+        dispatch(_failure(err));
+        toast.error(err);
+      }
+    );
+  };
+
+  function _success(book) {
+    return { type: adminConstants.ADD_BOOK_SUCCESS, book };
+  }
+  function _request() {
+    return { type: adminConstants.ADD_BOOK_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: adminConstants.ADD_BOOK_FAILURE, errMsg };
+  }
+}
+
 export function updateBook(id, book) {
   return dispatch => {
     dispatch(_request());

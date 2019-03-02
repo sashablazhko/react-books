@@ -37,6 +37,7 @@ export function books(state = new ReducerState(), action) {
     case booksConstants.LOAD_ALL_BOOKS_REQUEST:
     case booksConstants.LOAD_BOOK_REQUEST:
     case booksConstants.LOAD_CHAPTER_TEXT_REQUEST:
+    case adminConstants.ADD_BOOK_REQUEST:
     case adminConstants.UPDATE_BOOK_REQUEST:
     case adminConstants.UPDATE_CHAPTER_REQUEST:
       return state.set("loading", true);
@@ -49,10 +50,16 @@ export function books(state = new ReducerState(), action) {
 
     case booksConstants.LOAD_BOOK_SUCCESS:
     case adminConstants.UPDATE_BOOK_SUCCESS:
+    case adminConstants.ADD_BOOK_SUCCESS:
       return state
         .set("loading", false)
         .set("error", null)
         .update("entities", entities => entities.merge(arrToMap([action.book], "idBook", BookRecord)));
+
+    // case adminConstants.ADD_BOOK_SUCCESS:
+    //   return state
+    //     .set("loading", false)
+    //     .set("error", null)
 
     case booksConstants.LOAD_CHAPTER_TEXT_SUCCESS:
       return state
@@ -75,6 +82,7 @@ export function books(state = new ReducerState(), action) {
     case booksConstants.LOAD_ALL_BOOKS_FAILURE:
     case booksConstants.LOAD_BOOK_FAILURE:
     case booksConstants.LOAD_CHAPTER_TEXT_FAILURE:
+    case adminConstants.ADD_BOOK_FAILURE:
     case adminConstants.UPDATE_BOOK_FAILURE:
     case adminConstants.UPDATE_CHAPTER_FAILURE:
       return state

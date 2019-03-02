@@ -2,13 +2,24 @@ import React, { Component } from "react";
 import classes from "./AdminBookPage.module.css";
 import { connect } from "react-redux";
 
-import { loadBook, loadAllAuthors, uploadBookImg, deleteBookImg, updateBook } from "../../../../actions";
-import { uploadImgWithoutBook } from "../../../../actions/admin.actions";
+import {
+  loadBook,
+  loadAllAuthors,
+  uploadBookImg,
+  deleteBookImg,
+  updateBook,
+  uploadImgWithoutBook,
+  addBook,
+} from "../../../../actions";
 import BookEdit from "./BookEdit/BookEdit";
 import Loader from "../../../UI/Loader/Loader";
 import { booksLoadingSelector, authorsLoadingSelector, bookSelector, authorsListSelector } from "../../../../selectors";
 
 class AdminBookPage extends Component {
+  state = {
+    currentImg: "noimage.jpg",
+  };
+
   componentDidMount() {
     const { book, booksLoading, loadBook, match, authorsLoading, authors, loadAllAuthors, create } = this.props;
     if (!authorsLoading && !authors.length && match.params.idAuthor !== "new" && !create) {
@@ -20,19 +31,18 @@ class AdminBookPage extends Component {
     }
   }
 
-  handleCreate = args => {
-    console.log("args", args);
+  handleCreate = book => {
+    this.props.addBook(book);
   };
   handleEdit = book => {
-    // this.props.updateBook(this.props.match.params.idBook, book);
-    console.log("book", book);
+    this.props.updateBook(this.props.match.params.idBook, book);
   };
   handleDelete = () => {};
   handleUploadBookImg = file => this.props.uploadBookImg(file, +this.props.match.params.idBook);
   handleDeleteBookImg = () => this.props.deleteBookImg(+this.props.match.params.idBook);
   handleUploadImgWithoutBook = file =>
-    uploadImgWithoutBook(file).then(imgName => this.setState({ newBookImg: imgName }));
-  handleDeleteImgWithoutBook = () => this.setState({ newBookImg: "noimage.jpg" });
+    uploadImgWithoutBook(file).then(imgName => this.setState({ currentImg: imgName }));
+  handleDeleteImgWithoutBook = () => this.setState({ currentImg: "noimage.jpg" });
 
   editOrCreate = () => {
     const { create, book, booksLoading, authors, authorsLoading } = this.props;
@@ -42,6 +52,7 @@ class AdminBookPage extends Component {
       return (
         <BookEdit
           onSubmit={this.handleCreate}
+          currentImg={this.state.currentImg}
           onUploadImg={this.handleUploadImgWithoutBook}
           onDeleteImg={this.handleDeleteImgWithoutBook}
           authors={authors}
@@ -53,6 +64,7 @@ class AdminBookPage extends Component {
       return (
         <BookEdit
           onSubmit={this.handleEdit}
+          currentImg={book.bookImg}
           onUploadImg={this.handleUploadBookImg}
           onDeleteImg={this.handleDeleteBookImg}
           book={book}
@@ -76,5 +88,5 @@ export default connect(
     book: bookSelector(state, ownProps),
     authors: authorsListSelector(state),
   }),
-  { loadBook, loadAllAuthors, uploadBookImg, deleteBookImg, updateBook }
+  { loadBook, loadAllAuthors, uploadBookImg, deleteBookImg, updateBook, addBook }
 )(AdminBookPage);

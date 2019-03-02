@@ -11,12 +11,10 @@ class BookEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      initData: {
-        bookName: "",
-        authorId: null,
-        bookImg: "noimage.jpg",
-        bookDescription: "",
-      },
+      bookName: "",
+      authorId: null,
+      bookImg: this.props.currentImg,
+      bookDescription: "",
     };
     this.formRef = React.createRef();
     this.bookImgRef = React.createRef();
@@ -26,37 +24,27 @@ class BookEdit extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    console.log("props", props);
-    console.log("state", state);
-    if (props.book && props.book.bookImg !== state.initData.bookImg) {
+    if (props.currentImg !== state.bookImg) {
+      return {
+        bookImg: props.currentImg,
+      };
     }
-    return {
-      initData: {
-        bookName: props.book.bookName,
-        authorId: props.book.authorId,
-        bookImg: props.book.bookImg,
-        bookDescription: props.book.bookDescription,
-      },
-    };
+    return null;
   }
 
   componentDidMount() {
     const { book } = this.props;
     if (book) {
       this.setState({
-        initData: {
-          bookName: book.bookName,
-          authorId: book.authorId,
-          bookImg: book.bookImg,
-          bookDescription: book.bookDescription,
-        },
+        bookName: book.bookName,
+        authorId: book.authorId,
+        bookImg: book.bookImg,
+        bookDescription: book.bookDescription,
       });
     } else {
       this.setState({
-        initData: {
-          ...this.state.initData,
-          authorId: this.props.authors[0].idAuthor,
-        },
+        ...this.state,
+        authorId: this.props.authors[0].idAuthor,
       });
     }
   }
@@ -71,15 +59,27 @@ class BookEdit extends Component {
 
   handleDeleteImg(e) {
     e.preventDefault();
-    if (
-      (this.props.book && this.props.book.bookImg !== "noimage.jpg") ||
-      this.state.initData.bookImg !== "noimage.jpg"
-    ) {
+    if ((this.props.book && this.props.book.bookImg !== "noimage.jpg") || this.state.bookImg !== "noimage.jpg") {
       this.props.onDeleteImg();
     }
   }
 
   handleCancel() {
+    const { book } = this.props;
+    if (book) {
+      this.setState({
+        bookName: book.bookName,
+        authorId: book.authorId,
+        bookImg: book.bookImg,
+        bookDescription: book.bookDescription,
+      });
+    } else {
+      this.setState({
+        bookName: "",
+        authorId: this.props.authors[0].idAuthor,
+        bookDescription: "",
+      });
+    }
     this.formRef.current.form.reset();
   }
 
@@ -88,14 +88,19 @@ class BookEdit extends Component {
     return (
       <div className={classes.BookEdit}>
         <h2>{!book ? "Новая книга" : "Редактировать книгу"}</h2>
-        <Form initialValues={this.state.initData} onSubmit={onSubmit} ref={this.formRef}>
+        {book && <ChaptersList chapters={book.chapters} />}
+        <Form initialValues={this.state} onSubmit={onSubmit} ref={this.formRef} subscription={{ submitting: true }}>
           {({ handleSubmit, values, submitting, pristine }) => (
             <form onSubmit={handleSubmit}>
               <Field name="bookName" placeholder="Название книги">
                 {({ input, meta, placeholder }) => (
                   <div className="row">
                     <label>{placeholder}</label>
-                    <input {...input} placeholder={placeholder} />
+                    <input
+                      {...input}
+                      placeholder={placeholder}
+                      onChange={e => this.setState({ bookName: e.target.value })}
+                    />
                     {meta.error && meta.touched && <div className={classes.error}>{meta.error}</div>}
                   </div>
                 )}
@@ -105,7 +110,7 @@ class BookEdit extends Component {
                   return (
                     <div className="row">
                       <label>{placeholder}</label>
-                      <select {...input}>
+                      <select {...input} onChange={e => this.setState({ authorId: e.target.value })}>
                         {authors.map(author => {
                           return (
                             <option value={author.idAuthor} key={author.idAuthor}>
@@ -122,16 +127,13 @@ class BookEdit extends Component {
 
               <div className="row">
                 <label>Обложка</label>
-                <img
-                  src={`${apiHost}/uploads/${this.state.initData.bookImg}`}
-                  alt={book ? book.bookName : "no image"}
-                />
-                <p>{`${apiHost}/uploads/${this.state.initData.bookImg}`}</p>
+                <img src={`${apiHost}/uploads/${this.props.currentImg}`} alt={book ? book.bookName : "no image"} />
+                <p>{`${apiHost}/uploads/${this.props.currentImg}`}</p>
 
                 <input
                   type="text"
                   name="bookImgString"
-                  value={`${apiHost}/uploads/${this.state.initData.bookImg}`}
+                  value={`${apiHost}/uploads/${this.props.currentImg}`}
                   onChange={() => {}}
                 />
                 <Field name="bookImg" placeholder="Изображение">
@@ -152,7 +154,11 @@ class BookEdit extends Component {
                 {({ input, meta, placeholder }) => (
                   <div className="row">
                     <label>{placeholder}</label>
-                    <textarea {...input} placeholder={placeholder} />
+                    <textarea
+                      {...input}
+                      placeholder={placeholder}
+                      onChange={e => this.setState({ bookDescription: e.target.value })}
+                    />
                     {meta.error && meta.touched && <div className={classes.error}>{meta.error}</div>}
                   </div>
                 )}
@@ -167,7 +173,6 @@ class BookEdit extends Component {
             </form>
           )}
         </Form>
-        {book && <ChaptersList chapters={book.chapters} />}
         {/* <pre style={{ width: "1000px", overflow: "hidden" }}>{JSON.stringify(authors, null, 4)}</pre> 
         <pre style={{ width: "1000px", overflow: "hidden" }}>{JSON.stringify(book, null, 4)}</pre>*/}
       </div>

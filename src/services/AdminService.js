@@ -8,10 +8,14 @@ export const adminService = {
   addAuthor,
   updateAuthor,
   deleteAuthor,
+
   uploadBookImg,
   deleteBookImg,
   uploadImgWithoutBook,
+
+  addBook,
   updateBook,
+
   updateChapter,
 };
 
@@ -67,6 +71,20 @@ function uploadImgWithoutBook(file) {
 
   return axiosClear()
     .post("/admin/uploadimgwithoutbook", data, settings)
+    .then(handleResponse);
+}
+
+function addBook(book) {
+  const token = cookies.get("ACCESS_TOKEN");
+  Api().defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  const { bookName, authorId, bookImg, bookDescription } = book;
+  return Api()
+    .post("/admin/addbook", {
+      bookName,
+      authorId,
+      bookImg,
+      bookDescription,
+    })
     .then(handleResponse);
 }
 
