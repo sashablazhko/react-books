@@ -16,6 +16,7 @@ export const adminService = {
   addBook,
   updateBook,
 
+  addChapter,
   updateChapter,
 };
 
@@ -98,6 +99,20 @@ function updateBook(idBook, book) {
       authorId,
       bookImg,
       bookDescription,
+    })
+    .then(handleResponse);
+}
+
+function addChapter(bookId, chapter) {
+  console.log("bookId, chapter", bookId, chapter);
+  const token = cookies.get("ACCESS_TOKEN");
+  Api().defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  const { chapterName, chapterContent } = chapter;
+  return Api()
+    .post(`/admin/addchapter`, {
+      bookId,
+      chapterName,
+      chapterContent,
     })
     .then(handleResponse);
 }

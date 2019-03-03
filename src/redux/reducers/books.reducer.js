@@ -39,6 +39,7 @@ export function books(state = new ReducerState(), action) {
     case booksConstants.LOAD_CHAPTER_TEXT_REQUEST:
     case adminConstants.ADD_BOOK_REQUEST:
     case adminConstants.UPDATE_BOOK_REQUEST:
+    case adminConstants.ADD_CHAPTER_REQUEST:
     case adminConstants.UPDATE_CHAPTER_REQUEST:
       return state.set("loading", true);
 
@@ -56,23 +57,20 @@ export function books(state = new ReducerState(), action) {
         .set("error", null)
         .update("entities", entities => entities.merge(arrToMap([action.book], "idBook", BookRecord)));
 
-    // case adminConstants.ADD_BOOK_SUCCESS:
-    //   return state
-    //     .set("loading", false)
-    //     .set("error", null)
-
     case booksConstants.LOAD_CHAPTER_TEXT_SUCCESS:
       return state
         .set("loading", false)
         .set("error", null)
         .setIn(["entities", action.idBook, "chapters", action.idChapter, "chapterContent"], action.chapterContent);
 
+    case adminConstants.ADD_CHAPTER_SUCCESS:
     case adminConstants.UPDATE_CHAPTER_SUCCESS:
       return state
         .set("loading", false)
         .set("error", null)
-        .setIn(["entities", action.idBook, "chapters", action.idChapter, "chapterName"], action.chapterName)
-        .setIn(["entities", action.idBook, "chapters", action.idChapter, "chapterContent"], action.chapterContent);
+        .updateIn(["entities", action.idBook, "chapters"], chapters =>
+          chapters.merge(arrToMap([action.chapter], "idChapter", ChapterRecord))
+        );
 
     case adminConstants.UPLOAD_BOOKIMG_SUCCESS:
     case adminConstants.DELETE_BOOKIMG_SUCCESS:
@@ -84,6 +82,7 @@ export function books(state = new ReducerState(), action) {
     case booksConstants.LOAD_CHAPTER_TEXT_FAILURE:
     case adminConstants.ADD_BOOK_FAILURE:
     case adminConstants.UPDATE_BOOK_FAILURE:
+    case adminConstants.ADD_CHAPTER_FAILURE:
     case adminConstants.UPDATE_CHAPTER_FAILURE:
       return state
         .set("loading", false)

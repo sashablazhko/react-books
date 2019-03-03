@@ -92,6 +92,14 @@ class BookEdit extends Component {
     return (
       <div className={classes.BookEdit}>
         <h2>{!book ? "Новая книга" : "Редактировать книгу"}</h2>
+        {book && (
+          <React.Fragment>
+            <Link to={`/admin/books/${book.idBook}/new`}>
+              <button>Добавить главу</button>
+            </Link>
+            <hr />
+          </React.Fragment>
+        )}
         {book && <ChaptersList chapters={book.chapters} />}
         <Form
           initialValues={this.state}
@@ -146,7 +154,7 @@ class BookEdit extends Component {
                   {({ input, meta, placeholder }) => (
                     <div className="row">
                       <label>{placeholder}</label>
-                      <input {...input} placeholder={placeholder} />
+                      <input {...input} placeholder={placeholder} disabled />
                       {meta.error && meta.touched && <div className={classes.error}>{meta.error}</div>}
                     </div>
                   )}

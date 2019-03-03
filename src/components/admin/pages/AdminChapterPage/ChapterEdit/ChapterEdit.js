@@ -17,14 +17,18 @@ class ChapterEdit extends Component {
 
   render() {
     const { chapter, onSubmit, booksLoading } = this.props;
-    const initData = {
-      chapterName: chapter.chapterName,
-      chapterContent: chapter.chapterContent,
-    };
+    let initData = { chapterName: "", chapterContent: "" };
+    if (chapter) {
+      initData = {
+        chapterName: chapter.chapterName,
+        chapterContent: chapter.chapterContent,
+      };
+    }
+
     return (
       <div className={classes.ChapterEdit}>
         <h2>{!chapter ? "Новая глава" : "Редактировать главу"}</h2>
-        <Form initialValues={initData} onSubmit={onSubmit} ref={this.formRef}>
+        <Form initialValues={initData} onSubmit={onSubmit} ref={this.formRef} validate={validate}>
           {({ handleSubmit, values, submitting, pristine }) => (
             <form onSubmit={handleSubmit}>
               <Field name="chapterName" placeholder="Название главы">
@@ -59,5 +63,20 @@ class ChapterEdit extends Component {
     );
   }
 }
+
+const validate = val => {
+  const err = {};
+  if (!val.chapterName) {
+    err.chapterName = "Не может быть пустым";
+  } else if (val.chapterName.length < 3) {
+    err.chapterName = "Слишком короткое";
+  }
+  if (!val.chapterContent) {
+    err.chapterContent = "Не может быть пустым";
+  } else if (val.chapterContent.length < 3) {
+    err.chapterContent = "Слишком короткое";
+  }
+  return err;
+};
 
 export default ChapterEdit;

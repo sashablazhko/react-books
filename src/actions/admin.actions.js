@@ -186,6 +186,39 @@ export function updateBook(id, book) {
   }
 }
 
+export function addChapter(idBook, chapter) {
+  return dispatch => {
+    dispatch(_request());
+
+    adminService.addChapter(idBook, chapter).then(
+      chapter => {
+        dispatch(_success(chapter));
+        dispatch(push(`/admin/books/${chapter.bookId}`));
+      },
+      err => {
+        dispatch(_failure(err));
+        toast.error(err);
+      }
+    );
+  };
+
+  function _success(chapter) {
+    return {
+      type: adminConstants.ADD_CHAPTER_SUCCESS,
+      idBook: chapter.bookId,
+      chapter,
+    };
+  }
+  function _request() {
+    return { type: adminConstants.ADD_CHAPTER_REQUEST };
+  }
+  function _failure(err) {
+    const errMsg = (err.response && err.response.data.error) || err.toString();
+    toast.error(errMsg);
+    return { type: adminConstants.ADD_CHAPTER_FAILURE, errMsg };
+  }
+}
+
 export function updateChapter(idChapter, chapter) {
   return dispatch => {
     dispatch(_request());
@@ -205,10 +238,8 @@ export function updateChapter(idChapter, chapter) {
   function _success(chapter) {
     return {
       type: adminConstants.UPDATE_CHAPTER_SUCCESS,
-      idBook: +chapter.bookId,
-      idChapter: +idChapter,
-      chapterName: chapter.chapterName,
-      chapterContent: chapter.chapterContent,
+      idBook: chapter.bookId,
+      chapter,
     };
   }
   function _request() {

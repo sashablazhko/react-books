@@ -3,7 +3,7 @@ import classes from "./AdminChapterPage.module.css";
 import { connect } from "react-redux";
 
 import ChapterEdit from "./ChapterEdit/ChapterEdit";
-import { loadChapterText, updateChapter } from "../../../../actions";
+import { loadChapterText, updateChapter, addChapter } from "../../../../actions";
 import Loader from "../../../UI/Loader/Loader";
 import { booksLoadingSelector, chapterSelector } from "selectors";
 
@@ -12,12 +12,14 @@ class AdminChapterPage extends Component {
     const { chapter, booksLoading, loadChapterText, match } = this.props;
     const loadBookInfo = !chapter;
     const loadChaptertext = !chapter || (!!chapter && !chapter.chapterContent);
-    if (!booksLoading && loadChaptertext) {
+    if (!booksLoading && loadChaptertext && !!match.params.idChapter) {
       loadChapterText(+match.params.idBook, +match.params.idChapter, loadBookInfo);
     }
   }
 
-  handleCreate = () => {};
+  handleCreate = chapter => {
+    this.props.addChapter(this.props.match.params.idBook, chapter);
+  };
   handleEdit = chapter => {
     this.props.updateChapter(this.props.match.params.idChapter, chapter);
   };
@@ -25,7 +27,7 @@ class AdminChapterPage extends Component {
 
   editOrCreate = () => {
     const { create, booksLoading, chapter } = this.props;
-    if (booksLoading || !chapter) {
+    if (booksLoading) {
       return <Loader />;
     } else if (create) {
       return <ChapterEdit onSubmit={this.handleCreate} booksLoading={booksLoading} />;
@@ -44,5 +46,5 @@ export default connect(
     chapter: chapterSelector(state, ownProps),
     booksLoading: booksLoadingSelector(state),
   }),
-  { loadChapterText, updateChapter }
+  { loadChapterText, updateChapter, addChapter }
 )(AdminChapterPage);
