@@ -83,23 +83,36 @@ class BookEdit extends Component {
     this.formRef.current.form.reset();
   }
 
+  handleChange = (event, name) => {
+    this.setState({ [name]: event.target.value });
+  };
+
   render() {
     const { book, onSubmit, booksLoading, authors, authorsLoading } = this.props;
     return (
       <div className={classes.BookEdit}>
         <h2>{!book ? "Новая книга" : "Редактировать книгу"}</h2>
         {book && <ChaptersList chapters={book.chapters} />}
-        <Form initialValues={this.state} onSubmit={onSubmit} ref={this.formRef} subscription={{ submitting: true }}>
+        <Form
+          initialValues={this.state}
+          onSubmit={onSubmit}
+          ref={this.formRef}
+          subscription={{ submitting: true }}
+          validate={validate}
+        >
           {({ handleSubmit, values, submitting, pristine }) => (
             <form onSubmit={handleSubmit}>
-              <Field name="bookName" placeholder="Название книги">
-                {({ input, meta, placeholder }) => (
+              <Field name="bookName" placeholder="Название книги" inputOnChange={this.handleChange}>
+                {({ input, meta, placeholder, inputOnChange }) => (
                   <div className="row">
                     <label>{placeholder}</label>
                     <input
                       {...input}
                       placeholder={placeholder}
-                      onChange={e => this.setState({ bookName: e.target.value })}
+                      onChange={e => {
+                        input.onChange(e);
+                        inputOnChange && inputOnChange(e, input.name);
+                      }}
                     />
                     {meta.error && meta.touched && <div className={classes.error}>{meta.error}</div>}
                   </div>
@@ -129,13 +142,6 @@ class BookEdit extends Component {
                 <label>Обложка</label>
                 <img src={`${apiHost}/uploads/${this.props.currentImg}`} alt={book ? book.bookName : "no image"} />
                 <p>{`${apiHost}/uploads/${this.props.currentImg}`}</p>
-
-                <input
-                  type="text"
-                  name="bookImgString"
-                  value={`${apiHost}/uploads/${this.props.currentImg}`}
-                  onChange={() => {}}
-                />
                 <Field name="bookImg" placeholder="Изображение">
                   {({ input, meta, placeholder }) => (
                     <div className="row">
@@ -145,19 +151,21 @@ class BookEdit extends Component {
                     </div>
                   )}
                 </Field>
-
                 <input type="file" name="bookImg" ref={this.bookImgRef} />
                 <button onClick={this.handleUploadImg}>Загрузить</button>
                 <button onClick={this.handleDeleteImg}>Удалить</button>
               </div>
-              <Field name="bookDescription" placeholder="Описание">
-                {({ input, meta, placeholder }) => (
+              <Field name="bookDescription" placeholder="Описание" inputOnChange={this.handleChange}>
+                {({ input, meta, placeholder, inputOnChange }) => (
                   <div className="row">
                     <label>{placeholder}</label>
                     <textarea
                       {...input}
                       placeholder={placeholder}
-                      onChange={e => this.setState({ bookDescription: e.target.value })}
+                      onChange={e => {
+                        input.onChange(e);
+                        inputOnChange && inputOnChange(e, input.name);
+                      }}
                     />
                     {meta.error && meta.touched && <div className={classes.error}>{meta.error}</div>}
                   </div>
@@ -179,5 +187,20 @@ class BookEdit extends Component {
     );
   }
 }
+
+const validate = val => {
+  const err = {};
+  if (!val.bookName) {
+    err.bookName = "Не может быть пустым";
+  } else if (val.bookName.length < 3) {
+    err.bookName = "Слишком короткое";
+  }
+  if (!val.bookDescription) {
+    err.bookDescription = "Не может быть пустым";
+  } else if (val.bookDescription.length < 3) {
+    err.bookDescription = "Слишком короткое";
+  }
+  return err;
+};
 
 export default BookEdit;
