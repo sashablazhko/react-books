@@ -205,7 +205,7 @@ export function addChapter(idBook, chapter) {
   function _success(chapter) {
     return {
       type: adminConstants.ADD_CHAPTER_SUCCESS,
-      idBook: chapter.bookId,
+      idBook: +chapter.bookId,
       chapter,
     };
   }
@@ -238,7 +238,7 @@ export function updateChapter(idChapter, chapter) {
   function _success(chapter) {
     return {
       type: adminConstants.UPDATE_CHAPTER_SUCCESS,
-      idBook: chapter.bookId,
+      idBook: +chapter.bookId,
       chapter,
     };
   }

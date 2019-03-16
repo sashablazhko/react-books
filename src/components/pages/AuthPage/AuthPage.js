@@ -26,9 +26,13 @@ class AuthPage extends Component {
     if (accessToken) {
       const tokenData = decodeToken(accessToken);
       if (!isExpired(tokenData.expirationDate) && !expirationDate) {
+        console.log("me");
         me(accessToken);
-      } else if (isExpired(tokenData.expirationDate) && !expirationDate) {
+      } else if (isExpired(tokenData.expirationDate)) {
+        console.log("refreshToken");
         refreshToken(accessToken);
+      } else {
+        console.log("third wariant");
       }
     }
   }
