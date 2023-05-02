@@ -375,7 +375,7 @@ template {
 }
 
 .background{
-  background-color: rgba(220, 220, 220, .8);
+  background-color: rgba(220, 220, 220, .80);
   border-radius: 5px;
 }
 
